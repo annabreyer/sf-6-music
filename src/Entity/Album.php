@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AlbumRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -19,8 +20,15 @@ class Album
 
     #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'Albums')]
     #[ORM\JoinColumn(name: "artist_id", referencedColumnName: "id")]
-
     private Artist $artist;
+
+    #[ORM\OneToMany(targetEntity: Song::class, mappedBy: 'Album', cascade: ["persist"])]
+    private Collection $songs;
+
+    public function __construct(ArrayCollection $songs)
+    {
+        $this->songs = $songs;
+    }
 
     public function getId(): ?int
     {
@@ -39,19 +47,52 @@ class Album
         return $this;
     }
 
-    /**
-     * @return Artist
-     */
     public function getArtist(): Artist
     {
         return $this->artist;
     }
 
-    /**
-     * @param Artist $artist
-     */
     public function setArtist(Artist $artist): void
     {
         $this->artist = $artist;
     }
+
+    /**
+     * @return Collection|Song[]
+     */
+    public function getSongs(): Collection
+    {
+        return $this->songs;
+    }
+
+    /**
+     * @param Collection|Song[] $songs
+     */
+    public function setSongs(Collection $songs): void
+    {
+        $this->songs = $songs;
+    }
+
+    public function addSong(Song $song): self
+    {
+        if (empty($song->getAlbum())){
+            $song->setAlbum($this);
+        }
+
+        if ($this->songs->contains($song)){
+            return $this;
+        }
+
+        $this->songs->add($song);
+
+        return $this;
+    }
+
+    public function removeSong(Song $song): self
+    {
+        $this->songs->removeElement($song);
+
+        return $this;
+    }
+
 }

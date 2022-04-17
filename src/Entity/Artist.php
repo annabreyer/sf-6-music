@@ -13,16 +13,20 @@ class Artist
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $name;
+    private string $name;
 
     #[ORM\OneToMany(targetEntity: Album::class, mappedBy: 'Artist', cascade: ["persist"])]
     private Collection $albums;
 
+    #[ORM\OneToMany(targetEntity: Song::class, mappedBy: 'Artist', cascade: ["persist"])]
+    private Collection $songs;
+
     public function __construct() {
         $this->albums = new ArrayCollection();
+        $this->songs  = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,6 +80,44 @@ class Artist
     public function removeAlbum(Album $album): self
     {
         $this->albums->removeElement($album);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Song[]
+     */
+    public function getSongs(): Collection
+    {
+        return $this->songs;
+    }
+
+    /**
+     * @param Collection|Song[] $songs
+     */
+    public function setSongs(Collection $songs): void
+    {
+        $this->songs = $songs;
+    }
+
+    public function addSong(Song $song)
+    {
+        if (empty($song->getArtist())){
+            $song->setArtist($this);
+        }
+
+        if ($this->songs->contains($song)){
+            return $this;
+        }
+
+        $this->albums->add($song);
+
+        return $this;
+    }
+
+    public function removeSong(Song $song): self
+    {
+        $this->songs->removeElement($song);
 
         return $this;
     }

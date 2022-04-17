@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SongRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SongRepository::class)]
@@ -23,6 +24,9 @@ class Song
     #[ORM\ManyToOne(targetEntity: Album::class, inversedBy: 'Albums')]
     #[ORM\JoinColumn(name: "album_id", referencedColumnName: "id")]
     private Album $album;
+
+    #[ORM\ManyToMany(targetEntity: Playlist::class, mappedBy: 'Songs', cascade: ["persist"])]
+    private Collection $playlists;
 
     public function getId(): ?int
     {
@@ -71,5 +75,21 @@ class Song
     public function setAlbum(Album $album): void
     {
         $this->album = $album;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getPlaylists(): Collection
+    {
+        return $this->playlists;
+    }
+
+    /**
+     * @param Collection $playlists
+     */
+    public function setPlaylists(Collection $playlists): void
+    {
+        $this->playlists = $playlists;
     }
 }

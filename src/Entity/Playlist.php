@@ -22,9 +22,14 @@ class Playlist
     #[ORM\JoinTable(name: "playlist_songs")]
     private Collection $songs;
 
+    #[ORM\ManyToMany(targetEntity: PlaylistType::class, inversedBy: 'Playlists')]
+    #[ORM\JoinTable(name: "playlist_types")]
+    private Collection $types;
+
     public function __construct()
     {
         $this->songs = new ArrayCollection();
+        $this->types = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -39,7 +44,7 @@ class Playlist
 
     public function setName(string $name): self
     {
-        $this->Name = $name;
+        $this->name = $name;
 
         return $this;
     }
@@ -74,6 +79,40 @@ class Playlist
     public function removeSong(Song $song): self
     {
         $this->songs->removeElement($song);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PlaylistType[]
+     */
+    public function getTypes(): Collection
+    {
+        return $this->types;
+    }
+
+    /**
+     * @param Collection|PlaylistType[] $types
+     */
+    public function setTypes(Collection $types): void
+    {
+        $this->songs = $types;
+    }
+
+    public function addType(PlaylistType $types): self
+    {
+        if ($this->types->contains($types)){
+            return $this;
+        }
+
+        $this->types->add($types);
+
+        return $this;
+    }
+
+    public function removeType(PlaylistType $types): self
+    {
+        $this->types->removeElement($types);
 
         return $this;
     }

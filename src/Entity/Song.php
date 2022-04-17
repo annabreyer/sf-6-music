@@ -45,49 +45,31 @@ class Song
         return $this;
     }
 
-    /**
-     * @return Artist
-     */
     public function getArtist(): Artist
     {
         return $this->artist;
     }
 
-    /**
-     * @param Artist $artist
-     */
     public function setArtist(Artist $artist): void
     {
         $this->artist = $artist;
     }
 
-    /**
-     * @return Album
-     */
     public function getAlbum(): Album
     {
         return $this->album;
     }
 
-    /**
-     * @param Album $album
-     */
     public function setAlbum(Album $album): void
     {
         $this->album = $album;
     }
 
-    /**
-     * @return Collection
-     */
     public function getPlaylists(): Collection
     {
         return $this->playlists;
     }
 
-    /**
-     * @param Collection $playlists
-     */
     public function setPlaylists(Collection $playlists): void
     {
         $this->playlists = $playlists;

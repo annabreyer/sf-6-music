@@ -28,8 +28,6 @@ class SongRepositoryTest extends KernelTestCase
     protected function tearDown(): void
     {
         parent::tearDown();
-
-        // doing this is recommended to avoid memory leaks
         $this->entityManager->close();
     }
 

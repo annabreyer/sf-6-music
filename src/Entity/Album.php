@@ -25,9 +25,10 @@ class Album
     #[ORM\OneToMany(targetEntity: Song::class, mappedBy: 'Album', cascade: ["persist"])]
     private Collection $songs;
 
-    public function __construct(ArrayCollection $songs)
+    public function __construct(string $name)
     {
-        $this->songs = $songs;
+        $this->name  = $name;
+        $this->songs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -38,13 +39,6 @@ class Album
     public function getName(): ?string
     {
         return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     public function getArtist(): Artist
@@ -94,5 +88,4 @@ class Album
 
         return $this;
     }
-
 }

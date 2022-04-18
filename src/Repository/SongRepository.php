@@ -2,10 +2,12 @@
 
 namespace App\Repository;
 
+use App\Entity\Artist;
 use App\Entity\Song;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -45,32 +47,16 @@ class SongRepository extends ServiceEntityRepository
         }
     }
 
-    // /**
-    //  * @return Song[] Returns an array of Song objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findOneByTitleAndArtist(string $title, string $artist): ?Song
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Song
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
+            ->innerJoin(Artist::class, 'a', Join::WITH, 'a.id = s.artist')
+            ->andWhere('s.title = :title')
+            ->andWhere('a.name = :artist')
+            ->setParameter('title', $title)
+            ->setParameter('artist', $artist)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
 }

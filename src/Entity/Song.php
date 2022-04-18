@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Exceptions\InvalidArtistException;
 use App\Repository\SongRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -18,11 +19,11 @@ class Song
     #[ORM\Column(type: 'string', length: 255)]
     private string $title;
 
-    #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'Albums')]
+    #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'Albums', cascade: ["persist"])]
     #[ORM\JoinColumn(name: "artist_id", referencedColumnName: "id")]
     private Artist $artist;
 
-    #[ORM\ManyToOne(targetEntity: Album::class, inversedBy: 'Albums')]
+    #[ORM\ManyToOne(targetEntity: Album::class, inversedBy: 'Albums', cascade: ["persist"])]
     #[ORM\JoinColumn(name: "album_id", referencedColumnName: "id")]
     private Album $album;
 
@@ -56,9 +57,11 @@ class Song
         return $this->artist;
     }
 
-    public function setArtist(Artist $artist): void
+    public function setArtist(Artist $artist): self
     {
         $this->artist = $artist;
+
+        return $this;
     }
 
     public function getAlbum(): Album
@@ -66,9 +69,21 @@ class Song
         return $this->album;
     }
 
-    public function setAlbum(Album $album): void
+    public function setAlbum(Album $album): self
     {
         $this->album = $album;
+
+        if (null === $this->getArtist()) {
+            $this->artist = $album->getArtist();
+
+            return $this;
+        }
+
+        if ($album->getArtist() !== $this->getArtist()){
+            throw new InvalidArtistException('Album artist and song artist do not match.');
+        }
+
+        return $this;
     }
 
     public function getPlaylists(): Collection
@@ -76,8 +91,10 @@ class Song
         return $this->playlists;
     }
 
-    public function setPlaylists(Collection $playlists): void
+    public function setPlaylists(Collection $playlists): self
     {
         $this->playlists = $playlists;
+
+        return $this;
     }
 }

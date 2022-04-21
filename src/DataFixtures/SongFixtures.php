@@ -24,6 +24,17 @@ class SongFixtures extends Fixture
         $manager->persist($song);
         $manager->flush();
 
-        $this->addReference('firstSong', $song);
+
+        $artist = new Artist('Up and Coming Artist');
+        $album  = new Album('Debut');
+        $album->setArtist($artist);
+
+        $song   = new Song();
+        $song->setTitle('Love')
+             ->setArtist($artist)
+             ->setAlbum($album);
+
+        $manager->persist($song);
+        $manager->flush();
     }
 }

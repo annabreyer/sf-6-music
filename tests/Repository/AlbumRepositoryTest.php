@@ -20,8 +20,8 @@ class AlbumRepositoryTest extends KernelTestCase
     {
         parent::setUp();
 
-        $this->databaseTool   = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $this->entityManager  = self::getContainer()->get(EntityManagerInterface::class);
+        $this->databaseTool    = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        $this->entityManager   = self::getContainer()->get(EntityManagerInterface::class);
         $this->albumRepository = $this->entityManager->getRepository(Album::class);
     }
 

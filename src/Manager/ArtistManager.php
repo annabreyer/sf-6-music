@@ -10,7 +10,6 @@ use Doctrine\Persistence\ObjectManager;
 class ArtistManager
 {
     private ObjectManager $entityManager;
-    private ArtistRepository $artistRepository;
 
     public function __construct(ManagerRegistry $managerRegistry, ArtistRepository $artistRepository)
     {

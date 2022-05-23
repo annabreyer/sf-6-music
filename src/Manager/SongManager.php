@@ -10,8 +10,6 @@ use Doctrine\Persistence\ObjectManager;
 class SongManager
 {
     private ObjectManager $entityManager;
-    private SongRepository $songRepository;
-    private AlbumManager $albumManager;
 
     public function __construct(
         ManagerRegistry $managerRegistry,

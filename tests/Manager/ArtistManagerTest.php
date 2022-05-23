@@ -22,10 +22,10 @@ class ArtistManagerTest extends KernelTestCase
     {
         parent::setUp();
 
-        $this->databaseTool    = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $this->entityManager   = self::getContainer()->get(EntityManagerInterface::class);
+        $this->databaseTool     = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        $this->entityManager    = self::getContainer()->get(EntityManagerInterface::class);
         $this->artistRepository = $this->entityManager->getRepository(Artist::class);
-        $managerRegistry  = self::getContainer()->get('doctrine');
+        $managerRegistry        = self::getContainer()->get('doctrine');
 
         $this->artistManager = new ArtistManager($managerRegistry, $this->artistRepository);
     }
@@ -40,7 +40,7 @@ class ArtistManagerTest extends KernelTestCase
     {
         $this->databaseTool->loadFixtures([ArtistFixtures::class]);
         $existingArtist = $this->artistRepository->findOneBy(['name' => 'Major Artist']);
-        $artist        = $this->artistManager->createArtist('Major Artist');
+        $artist         = $this->artistManager->createArtist('Major Artist');
 
         $this->assertEquals($existingArtist->getId(), $artist->getId());
     }

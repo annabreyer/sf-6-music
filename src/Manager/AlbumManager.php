@@ -11,9 +11,6 @@ use Doctrine\Persistence\ObjectManager;
 class AlbumManager
 {
     private ObjectManager $entityManager;
-    private AlbumRepository $albumRepository;
-    private ArtistRepository $artistRepository;
-    private ArtistManager $artistManager;
 
     public function __construct(
         ManagerRegistry $managerRegistry,

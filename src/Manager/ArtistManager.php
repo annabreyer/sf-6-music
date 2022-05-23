@@ -11,9 +11,8 @@ class ArtistManager
 {
     private ObjectManager $entityManager;
 
-    public function __construct(ManagerRegistry $managerRegistry, ArtistRepository $artistRepository)
+    public function __construct(private ArtistRepository $artistRepository, ManagerRegistry $managerRegistry)
     {
-        $this->artistRepository = $artistRepository;
         $this->entityManager = $managerRegistry->getManager();
     }
 

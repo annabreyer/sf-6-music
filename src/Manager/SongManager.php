@@ -12,13 +12,11 @@ class SongManager
     private ObjectManager $entityManager;
 
     public function __construct(
-        ManagerRegistry $managerRegistry,
-        SongRepository $songRepository,
-        AlbumManager $albumManager
+        private SongRepository $songRepository,
+        private AlbumManager $albumManager,
+        ManagerRegistry $managerRegistry
     ) {
-        $this->entityManager  = $managerRegistry->getManager();
-        $this->songRepository = $songRepository;
-        $this->albumManager   = $albumManager;
+        $this->entityManager = $managerRegistry->getManager();
     }
 
     public function createSong(string $title, string $artist, string $albumName): Song

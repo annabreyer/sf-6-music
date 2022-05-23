@@ -13,15 +13,12 @@ class AlbumManager
     private ObjectManager $entityManager;
 
     public function __construct(
-        ManagerRegistry $managerRegistry,
-        AlbumRepository $albumRepository,
-        ArtistRepository $artistRepository,
-        ArtistManager $artistManager
+        private AlbumRepository $albumRepository,
+        private ArtistRepository $artistRepository,
+        private ArtistManager $artistManager,
+        ManagerRegistry $managerRegistry
     ) {
-        $this->entityManager    = $managerRegistry->getManager();
-        $this->albumRepository  = $albumRepository;
-        $this->artistRepository = $artistRepository;
-        $this->artistManager    = $artistManager;
+        $this->entityManager = $managerRegistry->getManager();
     }
 
     public function createAlbum(string $albumName, string $artistName): Album

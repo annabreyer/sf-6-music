@@ -99,20 +99,20 @@ class Playlist
         $this->songs = $types;
     }
 
-    public function addType(PlaylistType $types): self
+    public function addType(PlaylistType $type): self
     {
-        if ($this->types->contains($types)){
+        if ($this->types->contains($type)){
             return $this;
         }
 
-        $this->types->add($types);
+        $this->types->add($type);
 
         return $this;
     }
 
-    public function removeType(PlaylistType $types): self
+    public function removeType(PlaylistType $type): self
     {
-        $this->types->removeElement($types);
+        $this->types->removeElement($type);
 
         return $this;
     }

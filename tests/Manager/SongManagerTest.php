@@ -35,13 +35,12 @@ class SongManagerTest extends KernelTestCase
         $artistRepository = $this->entityManager->getRepository(Artist::class);
 
         $albumManager = new AlbumManager(
-            $managerRegistry,
             $this->entityManager->getRepository(Album::class),
             $artistRepository,
-            new ArtistManager($managerRegistry, $artistRepository)
+            new ArtistManager($artistRepository)
         );
 
-        $this->songManager = new SongManager($managerRegistry, $this->songRepository, $albumManager);
+        $this->songManager = new SongManager($this->songRepository, $albumManager);
     }
 
     protected function tearDown(): void

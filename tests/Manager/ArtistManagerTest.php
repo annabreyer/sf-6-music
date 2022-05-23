@@ -25,9 +25,8 @@ class ArtistManagerTest extends KernelTestCase
         $this->databaseTool     = self::getContainer()->get(DatabaseToolCollection::class)->get();
         $this->entityManager    = self::getContainer()->get(EntityManagerInterface::class);
         $this->artistRepository = $this->entityManager->getRepository(Artist::class);
-        $managerRegistry        = self::getContainer()->get('doctrine');
 
-        $this->artistManager = new ArtistManager($managerRegistry, $this->artistRepository);
+        $this->artistManager = new ArtistManager($this->artistRepository);
     }
 
     protected function tearDown(): void

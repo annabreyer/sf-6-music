@@ -29,13 +29,11 @@ class AlbumManagerTest extends KernelTestCase
         $this->albumRepository = $this->entityManager->getRepository(Album::class);
 
         $artistRepository = $this->entityManager->getRepository(Artist::class);
-        $managerRegistry  = self::getContainer()->get('doctrine');
 
         $this->albumManager = new AlbumManager(
-            $managerRegistry,
             $this->albumRepository,
             $artistRepository,
-            new ArtistManager($managerRegistry, $artistRepository)
+            new ArtistManager($artistRepository)
         );
     }
 

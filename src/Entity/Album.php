@@ -18,7 +18,7 @@ class Album
     #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'Albums')]
+    #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'Albums', cascade: ["persist"])]
     #[ORM\JoinColumn(name: "artist_id", referencedColumnName: "id")]
     private Artist $artist;
 

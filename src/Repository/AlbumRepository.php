@@ -3,9 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Album;
+use App\Entity\Artist;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -45,32 +47,16 @@ class AlbumRepository extends ServiceEntityRepository
         }
     }
 
-    // /**
-    //  * @return Album[] Returns an array of Album objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findOneByNameAndArtist(string $albumName, string $artist): ?Album
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
+        return $this->createQueryBuilder('alb')
+                    ->innerJoin(Artist::class, 'art', Join::WITH, 'art.id = alb.artist')
+                    ->andWhere('alb.name = :name')
+                    ->andWhere('art.name = :artist')
+                    ->setParameter('name', $albumName)
+                    ->setParameter('artist', $artist)
+                    ->getQuery()
+                    ->getOneOrNullResult()
         ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Album
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

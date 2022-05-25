@@ -28,9 +28,10 @@ class PlaylistType
     #[ORM\ManyToMany(targetEntity: Playlist::class, mappedBy: 'types', cascade: ["persist"])]
     private Collection $playlists;
 
-    public function __construct()
+    public function __construct(string $type)
     {
         $this->playlists = new ArrayCollection();
+        $this->type      = $type;
     }
 
     public function getId(): ?int

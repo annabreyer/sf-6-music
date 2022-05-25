@@ -8,8 +8,7 @@ use App\Repository\ArtistRepository;
 class ArtistManager
 {
     public function __construct(private ArtistRepository $artistRepository)
-    {
-    }
+    {}
 
     public function createArtist(string $name)
     {

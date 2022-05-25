@@ -13,7 +13,7 @@ class ArtistManager
     {
     }
 
-    public function createArtist(string $name)
+    public function createArtist(string $name): Artist
     {
         $artist = $this->artistRepository->findOneBy(['name' => $name]);
 

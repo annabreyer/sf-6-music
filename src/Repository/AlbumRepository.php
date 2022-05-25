@@ -7,8 +7,8 @@ namespace App\Repository;
 use App\Entity\Album;
 use App\Entity\Artist;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,6 +17,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method null|Album findOneBy(array $criteria, array $orderBy = null)
  * @method Album[]    findAll()
  * @method Album[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
+ * @extends ServiceEntityRepository<Album>
  */
 class AlbumRepository extends ServiceEntityRepository
 {

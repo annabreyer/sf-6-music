@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types = 1);
 
 namespace App\Tests\Manager;
 
@@ -35,7 +37,7 @@ class ArtistManagerTest extends KernelTestCase
         $this->entityManager->close();
     }
 
-    public function testCreateArtistReturnsExistingArtist()
+    public function testCreateArtistReturnsExistingArtist(): void
     {
         $this->databaseTool->loadFixtures([ArtistFixtures::class]);
         $existingArtist = $this->artistRepository->findOneBy(['name' => 'Major Artist']);
@@ -44,7 +46,7 @@ class ArtistManagerTest extends KernelTestCase
         $this->assertEquals($existingArtist->getId(), $artist->getId());
     }
 
-    public function testCreateArtistReturnsNewArtist()
+    public function testCreateArtistReturnsNewArtist(): void
     {
         $artist = $this->artistManager->createArtist('Up and coming Artist');
         $this->assertEquals('Up and coming Artist', $artist->getName());

@@ -17,6 +17,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method null|Song findOneBy(array $criteria, array $orderBy = null)
  * @method Song[]    findAll()
  * @method Song[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
+ * @extends ServiceEntityRepository<Song>
  */
 class SongRepository extends ServiceEntityRepository
 {

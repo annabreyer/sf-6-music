@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types = 1);
 
 namespace App\Tests\Manager;
 
@@ -49,7 +51,7 @@ class SongManagerTest extends KernelTestCase
         $this->entityManager->close();
     }
 
-    public function testCreateSongReturnsExistingSong()
+    public function testCreateSongReturnsExistingSong(): void
     {
         $this->databaseTool->loadFixtures([SongFixtures::class]);
         $existingSong = $this->songRepository->findOneByTitleAndArtist('Ode to Unit Testing', 'Major Artist');
@@ -58,7 +60,7 @@ class SongManagerTest extends KernelTestCase
         $this->assertEquals($existingSong->getId(), $song->getId());
     }
 
-    public function testCreateSongReturnsNewSong()
+    public function testCreateSongReturnsNewSong(): void
     {
         $this->databaseTool->loadFixtures([ArtistFixtures::class]);
         $song  = $this->songManager->createSong('Let\'s code', 'Hoodie', 'Coding serenates');

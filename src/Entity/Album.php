@@ -15,10 +15,10 @@ class Album
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $name;
+    private string $name;
 
     #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'Albums', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'artist_id', referencedColumnName: 'id')]
@@ -46,7 +46,7 @@ class Album
         return $this->name;
     }
 
-    public function getArtist(): Artist
+    public function getArtist(): ?Artist
     {
         return $this->artist;
     }

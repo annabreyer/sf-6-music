@@ -2,6 +2,7 @@
 
 $finder = PhpCsFixer\Finder::create()
                            ->in(__DIR__)
+                            ->exclude('var')
 ;
 
 $config = new PhpCsFixer\Config();
@@ -42,10 +43,14 @@ return $config->setRules([
     'strict_param'                                     => true,
     'no_trailing_whitespace_in_string'                 => true,
     'string_length_to_empty'                           => true,
-    'binary_operator_spaces'                           => ['operators' => [
-        '=>' => 'align',
-        '+=' => 'align_single_space',
-        '=' => 'align_single_space']],
+    'binary_operator_spaces'                           => [
+        'operators' => [
+            '=>' => 'align',
+            '+=' => 'align_single_space',
+            '='  => 'align_single_space',
+        ],
+    ],
+    'void_return'                                      => true,
 ])
               ->setFinder($finder)
 ;

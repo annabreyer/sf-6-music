@@ -50,7 +50,7 @@ class Artist
     }
 
     /**
-     * @return Album[]|Collection
+     * @return Album[]|Collection<int, Album>
      */
     public function getAlbums(): Collection
     {
@@ -58,7 +58,7 @@ class Artist
     }
 
     /**
-     * @param Album[]|Collection $albums
+     * @param Album[]|Collection<int, Album> $albums
      */
     public function setAlbums(Collection $albums): void
     {
@@ -67,7 +67,7 @@ class Artist
 
     public function addAlbum(Album $album): self
     {
-        if (empty($album->getArtist())) {
+        if (null === $album->getArtist()) {
             $album->setArtist($this);
         }
 
@@ -88,7 +88,7 @@ class Artist
     }
 
     /**
-     * @return Collection|Song[]
+     * @return Collection<int, Song>|Song[]
      */
     public function getSongs(): Collection
     {
@@ -96,16 +96,16 @@ class Artist
     }
 
     /**
-     * @param Collection|Song[] $songs
+     * @param Collection<int, Song>|Song[] $songs
      */
     public function setSongs(Collection $songs): void
     {
         $this->songs = $songs;
     }
 
-    public function addSong(Song $song)
+    public function addSong(Song $song): self
     {
-        if (empty($song->getArtist())) {
+        if (null === $song->getArtist()) {
             $song->setArtist($this);
         }
 
@@ -113,7 +113,7 @@ class Artist
             return $this;
         }
 
-        $this->albums->add($song);
+        $this->songs->add($song);
 
         return $this;
     }

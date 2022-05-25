@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types = 1);
 
 namespace App\Tests\Repository;
 
@@ -31,7 +33,7 @@ class SongRepositoryTest extends KernelTestCase
         $this->entityManager->close();
     }
 
-    public function testFindOneByTitleAndArtist()
+    public function testFindOneByTitleAndArtist(): void
     {
         $this->databaseTool->loadFixtures([SongFixtures::class]);
 

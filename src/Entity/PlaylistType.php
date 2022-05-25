@@ -22,10 +22,10 @@ class PlaylistType
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $type;
+    private string $type;
 
     /**
      * @var Collection<int, Playlist>&iterable<Playlist>
@@ -55,11 +55,17 @@ class PlaylistType
         return $this;
     }
 
+    /**
+     * @return Collection<int, Playlist>|Playlist[]
+     */
     public function getPlaylists(): Collection
     {
         return $this->playlists;
     }
 
+    /**
+     * @param Collection<int, Playlist>|Playlist[] $playlists
+     */
     public function setPlaylists(Collection $playlists): void
     {
         $this->playlists = $playlists;

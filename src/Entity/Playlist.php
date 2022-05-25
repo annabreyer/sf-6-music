@@ -15,10 +15,10 @@ class Playlist
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $name;
+    private string $name;
 
     /**
      * @var Collection<int, Song>&iterable<Song>
@@ -58,7 +58,7 @@ class Playlist
     }
 
     /**
-     * @return Collection|Song[]
+     * @return Collection<int, Song>|Song[]
      */
     public function getSongs(): Collection
     {
@@ -66,7 +66,7 @@ class Playlist
     }
 
     /**
-     * @param Collection|Song[] $songs
+     * @param Collection<int, Song>|Song[] $songs
      */
     public function setSongs(Collection $songs): void
     {
@@ -92,7 +92,7 @@ class Playlist
     }
 
     /**
-     * @return Collection|PlaylistType[]
+     * @return Collection<int, PlaylistType>|PlaylistType[]
      */
     public function getTypes(): Collection
     {
@@ -100,11 +100,11 @@ class Playlist
     }
 
     /**
-     * @param Collection|PlaylistType[] $types
+     * @param Collection<int, PlaylistType>|PlaylistType[] $types
      */
     public function setTypes(Collection $types): void
     {
-        $this->songs = $types;
+        $this->types = $types;
     }
 
     public function addType(PlaylistType $types): self

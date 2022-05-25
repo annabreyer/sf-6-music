@@ -57,7 +57,7 @@ class Song
         return $this;
     }
 
-    public function getArtist(): Artist
+    public function getArtist(): ?Artist
     {
         return $this->artist;
     }
@@ -69,7 +69,7 @@ class Song
         return $this;
     }
 
-    public function getAlbum(): Album
+    public function getAlbum(): ?Album
     {
         return $this->album;
     }
@@ -91,11 +91,17 @@ class Song
         return $this;
     }
 
+    /**
+     * @return Collection<int, Playlist>|Playlist[]
+     */
     public function getPlaylists(): Collection
     {
         return $this->playlists;
     }
 
+    /**
+     * @param Collection<int, Playlist>|Playlist[] $playlists
+     */
     public function setPlaylists(Collection $playlists): self
     {
         $this->playlists = $playlists;

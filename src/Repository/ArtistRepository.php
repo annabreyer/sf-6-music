@@ -15,6 +15,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method null|Artist findOneBy(array $criteria, array $orderBy = null)
  * @method Artist[]    findAll()
  * @method Artist[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
+ * @extends ServiceEntityRepository<Artist>
  */
 class ArtistRepository extends ServiceEntityRepository
 {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity;
 
 use App\Repository\PlaylistTypeRepository;
@@ -10,12 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: PlaylistTypeRepository::class)]
 class PlaylistType
 {
-    const TYPE_SUMMER    = 'summer';
-    const TYPE_SPRING    = 'spring';
-    const TYPE_AUTUMN    = 'autumn';
-    const TYPE_WINTER    = 'winter';
-    const TYPE_FAVORITES = 'favorites';
-    const TYPE_THEME     = 'theme';
+    public const TYPE_SUMMER    = 'summer';
+    public const TYPE_SPRING    = 'spring';
+    public const TYPE_AUTUMN    = 'autumn';
+    public const TYPE_WINTER    = 'winter';
+    public const TYPE_FAVORITES = 'favorites';
+    public const TYPE_THEME     = 'theme';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -25,7 +27,7 @@ class PlaylistType
     #[ORM\Column(type: 'string', length: 255)]
     private $type;
 
-    #[ORM\ManyToMany(targetEntity: Playlist::class, mappedBy: 'types', cascade: ["persist"])]
+    #[ORM\ManyToMany(targetEntity: Playlist::class, mappedBy: 'types', cascade: ['persist'])]
     private Collection $playlists;
 
     public function __construct()

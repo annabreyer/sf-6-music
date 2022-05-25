@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity;
 
 use App\Repository\AlbumRepository;
@@ -18,11 +20,11 @@ class Album
     #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'Albums', cascade: ["persist"])]
-    #[ORM\JoinColumn(name: "artist_id", referencedColumnName: "id")]
+    #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'Albums', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'artist_id', referencedColumnName: 'id')]
     private Artist $artist;
 
-    #[ORM\OneToMany(targetEntity: Song::class, mappedBy: 'Album', cascade: ["persist"])]
+    #[ORM\OneToMany(targetEntity: Song::class, mappedBy: 'Album', cascade: ['persist'])]
     private Collection $songs;
 
     public function __construct(string $name)
@@ -69,11 +71,11 @@ class Album
 
     public function addSong(Song $song): self
     {
-        if (empty($song->getAlbum())){
+        if (empty($song->getAlbum())) {
             $song->setAlbum($this);
         }
 
-        if ($this->songs->contains($song)){
+        if ($this->songs->contains($song)) {
             return $this;
         }
 

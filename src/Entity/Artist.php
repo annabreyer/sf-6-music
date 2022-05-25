@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity;
 
 use App\Repository\ArtistRepository;
@@ -18,13 +20,14 @@ class Artist
     #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
-    #[ORM\OneToMany(targetEntity: Album::class, mappedBy: 'Artist', cascade: ["persist"])]
+    #[ORM\OneToMany(targetEntity: Album::class, mappedBy: 'Artist', cascade: ['persist'])]
     private Collection $albums;
 
-    #[ORM\OneToMany(targetEntity: Song::class, mappedBy: 'Artist', cascade: ["persist"])]
+    #[ORM\OneToMany(targetEntity: Song::class, mappedBy: 'Artist', cascade: ['persist'])]
     private Collection $songs;
 
-    public function __construct(string $name) {
+    public function __construct(string $name)
+    {
         $this->name   = $name;
         $this->albums = new ArrayCollection();
         $this->songs  = new ArrayCollection();
@@ -41,7 +44,7 @@ class Artist
     }
 
     /**
-     * @return Collection|Album[]
+     * @return Album[]|Collection
      */
     public function getAlbums(): Collection
     {
@@ -49,7 +52,7 @@ class Artist
     }
 
     /**
-     * @param Collection|Album[] $albums
+     * @param Album[]|Collection $albums
      */
     public function setAlbums(Collection $albums): void
     {
@@ -58,11 +61,11 @@ class Artist
 
     public function addAlbum(Album $album): self
     {
-        if (empty($album->getArtist())){
+        if (empty($album->getArtist())) {
             $album->setArtist($this);
         }
 
-        if ($this->albums->contains($album)){
+        if ($this->albums->contains($album)) {
             return $this;
         }
 
@@ -96,11 +99,11 @@ class Artist
 
     public function addSong(Song $song)
     {
-        if (empty($song->getArtist())){
+        if (empty($song->getArtist())) {
             $song->setArtist($this);
         }
 
-        if ($this->songs->contains($song)){
+        if ($this->songs->contains($song)) {
             return $this;
         }
 

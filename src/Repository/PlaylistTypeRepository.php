@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Repository;
 
 use App\Entity\PlaylistType;
@@ -9,8 +11,8 @@ use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method PlaylistType|null find($id, $lockMode = null, $lockVersion = null)
- * @method PlaylistType|null findOneBy(array $criteria, array $orderBy = null)
+ * @method null|PlaylistType find($id, $lockMode = null, $lockVersion = null)
+ * @method null|PlaylistType findOneBy(array $criteria, array $orderBy = null)
  * @method PlaylistType[]    findAll()
  * @method PlaylistType[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */

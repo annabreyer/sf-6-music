@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Repository;
 
 use App\Entity\Artist;
@@ -11,8 +13,8 @@ use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Song|null find($id, $lockMode = null, $lockVersion = null)
- * @method Song|null findOneBy(array $criteria, array $orderBy = null)
+ * @method null|Song find($id, $lockMode = null, $lockVersion = null)
+ * @method null|Song findOneBy(array $criteria, array $orderBy = null)
  * @method Song[]    findAll()
  * @method Song[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity;
 
 use App\Exceptions\InvalidArtistException;
@@ -19,15 +21,15 @@ class Song
     #[ORM\Column(type: 'string', length: 255)]
     private string $title;
 
-    #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'Albums', cascade: ["persist"])]
-    #[ORM\JoinColumn(name: "artist_id", referencedColumnName: "id")]
+    #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'Albums', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'artist_id', referencedColumnName: 'id')]
     private Artist $artist;
 
-    #[ORM\ManyToOne(targetEntity: Album::class, inversedBy: 'Albums', cascade: ["persist"])]
-    #[ORM\JoinColumn(name: "album_id", referencedColumnName: "id")]
+    #[ORM\ManyToOne(targetEntity: Album::class, inversedBy: 'Albums', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'album_id', referencedColumnName: 'id')]
     private Album $album;
 
-    #[ORM\ManyToMany(targetEntity: Playlist::class, mappedBy: 'Songs', cascade: ["persist"])]
+    #[ORM\ManyToMany(targetEntity: Playlist::class, mappedBy: 'Songs', cascade: ['persist'])]
     private Collection $playlists;
 
     public function __construct()
@@ -79,7 +81,7 @@ class Song
             return $this;
         }
 
-        if ($album->getArtist() !== $this->getArtist()){
+        if ($album->getArtist() !== $this->getArtist()) {
             throw new InvalidArtistException('Album artist and song artist do not match.');
         }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity;
 
 use App\Repository\PlaylistRepository;
@@ -19,11 +21,11 @@ class Playlist
     private $name;
 
     #[ORM\ManyToMany(targetEntity: Song::class, inversedBy: 'Playlists')]
-    #[ORM\JoinTable(name: "playlist_songs")]
+    #[ORM\JoinTable(name: 'playlist_songs')]
     private Collection $songs;
 
     #[ORM\ManyToMany(targetEntity: PlaylistType::class, inversedBy: 'Playlists')]
-    #[ORM\JoinTable(name: "playlist_types")]
+    #[ORM\JoinTable(name: 'playlist_types')]
     private Collection $types;
 
     public function __construct()
@@ -67,7 +69,7 @@ class Playlist
 
     public function addSong(Song $song): self
     {
-        if ($this->songs->contains($song)){
+        if ($this->songs->contains($song)) {
             return $this;
         }
 
@@ -101,7 +103,7 @@ class Playlist
 
     public function addType(PlaylistType $types): self
     {
-        if ($this->types->contains($types)){
+        if ($this->types->contains($types)) {
             return $this;
         }
 

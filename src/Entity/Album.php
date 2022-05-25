@@ -22,8 +22,11 @@ class Album
 
     #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'Albums', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'artist_id', referencedColumnName: 'id')]
-    private Artist $artist;
+    private Artist|null $artist;
 
+    /**
+     * @var Collection<int, Song>&iterable<Song>
+     */
     #[ORM\OneToMany(targetEntity: Song::class, mappedBy: 'Album', cascade: ['persist'])]
     private Collection $songs;
 
@@ -54,7 +57,7 @@ class Album
     }
 
     /**
-     * @return Collection|Song[]
+     * @return Collection<int, Song>|Song[]
      */
     public function getSongs(): Collection
     {
@@ -62,7 +65,7 @@ class Album
     }
 
     /**
-     * @param Collection|Song[] $songs
+     * @param Collection<int, Song>|Song[] $songs
      */
     public function setSongs(Collection $songs): void
     {
@@ -71,7 +74,7 @@ class Album
 
     public function addSong(Song $song): self
     {
-        if (empty($song->getAlbum())) {
+        if (null === $song->getAlbum()) {
             $song->setAlbum($this);
         }
 

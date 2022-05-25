@@ -20,10 +20,16 @@ class Playlist
     #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
+    /**
+     * @var Collection<int, Song>&iterable<Song>
+     */
     #[ORM\ManyToMany(targetEntity: Song::class, inversedBy: 'Playlists')]
     #[ORM\JoinTable(name: 'playlist_songs')]
     private Collection $songs;
 
+    /**
+     * @var Collection<int, PlaylistType>&iterable<PlaylistType>
+     */
     #[ORM\ManyToMany(targetEntity: PlaylistType::class, inversedBy: 'Playlists')]
     #[ORM\JoinTable(name: 'playlist_types')]
     private Collection $types;

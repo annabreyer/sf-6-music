@@ -27,6 +27,9 @@ class PlaylistType
     #[ORM\Column(type: 'string', length: 255)]
     private $type;
 
+    /**
+     * @var Collection<int, Playlist>&iterable<Playlist>
+     */
     #[ORM\ManyToMany(targetEntity: Playlist::class, mappedBy: 'types', cascade: ['persist'])]
     private Collection $playlists;
 

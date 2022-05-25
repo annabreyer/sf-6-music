@@ -23,12 +23,15 @@ class Song
 
     #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'Albums', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'artist_id', referencedColumnName: 'id')]
-    private Artist $artist;
+    private Artist|null $artist;
 
     #[ORM\ManyToOne(targetEntity: Album::class, inversedBy: 'Albums', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'album_id', referencedColumnName: 'id')]
-    private Album $album;
+    private Album|null $album;
 
+    /**
+     * @var Collection<int, Playlist>&iterable<Playlist>
+     */
     #[ORM\ManyToMany(targetEntity: Playlist::class, mappedBy: 'Songs', cascade: ['persist'])]
     private Collection $playlists;
 

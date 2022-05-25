@@ -20,9 +20,15 @@ class Artist
     #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
+    /**
+     * @var Collection<int, Album>&iterable<Album>
+     */
     #[ORM\OneToMany(targetEntity: Album::class, mappedBy: 'Artist', cascade: ['persist'])]
     private Collection $albums;
 
+    /**
+     * @var Collection<int, Song>&iterable<Song>
+     */
     #[ORM\OneToMany(targetEntity: Song::class, mappedBy: 'Artist', cascade: ['persist'])]
     private Collection $songs;
 

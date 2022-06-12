@@ -1,20 +1,24 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Repository;
 
 use App\Entity\Album;
 use App\Entity\Artist;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Album|null find($id, $lockMode = null, $lockVersion = null)
- * @method Album|null findOneBy(array $criteria, array $orderBy = null)
+ * @method null|Album find($id, $lockMode = null, $lockVersion = null)
+ * @method null|Album findOneBy(array $criteria, array $orderBy = null)
  * @method Album[]    findAll()
  * @method Album[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
+ * @extends ServiceEntityRepository<Album>
  */
 class AlbumRepository extends ServiceEntityRepository
 {
@@ -50,13 +54,13 @@ class AlbumRepository extends ServiceEntityRepository
     public function findOneByNameAndArtist(string $albumName, string $artist): ?Album
     {
         return $this->createQueryBuilder('alb')
-                    ->innerJoin(Artist::class, 'art', Join::WITH, 'art.id = alb.artist')
-                    ->andWhere('alb.name = :name')
-                    ->andWhere('art.name = :artist')
-                    ->setParameter('name', $albumName)
-                    ->setParameter('artist', $artist)
-                    ->getQuery()
-                    ->getOneOrNullResult()
+            ->innerJoin(Artist::class, 'art', Join::WITH, 'art.id = alb.artist')
+            ->andWhere('alb.name = :name')
+            ->andWhere('art.name = :artist')
+            ->setParameter('name', $albumName)
+            ->setParameter('artist', $artist)
+            ->getQuery()
+            ->getOneOrNullResult()
         ;
     }
 }

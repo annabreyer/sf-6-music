@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types = 1);
 
 namespace App\Tests\Manager;
 
@@ -13,6 +15,10 @@ use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class AlbumManagerTest extends KernelTestCase
 {
     protected AbstractDatabaseTool $databaseTool;
@@ -24,8 +30,8 @@ class AlbumManagerTest extends KernelTestCase
     {
         parent::setUp();
 
-        $this->databaseTool   = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $this->entityManager  = self::getContainer()->get(EntityManagerInterface::class);
+        $this->databaseTool    = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        $this->entityManager   = self::getContainer()->get(EntityManagerInterface::class);
         $this->albumRepository = $this->entityManager->getRepository(Album::class);
 
         $artistRepository = $this->entityManager->getRepository(Artist::class);

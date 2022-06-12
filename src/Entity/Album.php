@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity;
 
 use App\Repository\AlbumRepository;
@@ -13,16 +15,19 @@ class Album
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $name;
+    private string $name;
 
-    #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'Albums', cascade: ["persist"])]
-    #[ORM\JoinColumn(name: "artist_id", referencedColumnName: "id")]
-    private Artist $artist;
+    #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'Albums', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'artist_id', referencedColumnName: 'id')]
+    private Artist|null $artist;
 
-    #[ORM\OneToMany(targetEntity: Song::class, mappedBy: 'Album', cascade: ["persist"])]
+    /**
+     * @var Collection<int, Song>&iterable<Song>
+     */
+    #[ORM\OneToMany(targetEntity: Song::class, mappedBy: 'Album', cascade: ['persist'])]
     private Collection $songs;
 
     public function __construct(string $name)
@@ -41,7 +46,7 @@ class Album
         return $this->name;
     }
 
-    public function getArtist(): Artist
+    public function getArtist(): ?Artist
     {
         return $this->artist;
     }
@@ -52,7 +57,7 @@ class Album
     }
 
     /**
-     * @return Collection|Song[]
+     * @return Collection<int, Song>|Song[]
      */
     public function getSongs(): Collection
     {
@@ -60,7 +65,7 @@ class Album
     }
 
     /**
-     * @param Collection|Song[] $songs
+     * @param Collection<int, Song>|Song[] $songs
      */
     public function setSongs(Collection $songs): void
     {
@@ -69,11 +74,11 @@ class Album
 
     public function addSong(Song $song): self
     {
-        if (empty($song->getAlbum())){
+        if (null === $song->getAlbum()) {
             $song->setAlbum($this);
         }
 
-        if ($this->songs->contains($song)){
+        if ($this->songs->contains($song)) {
             return $this;
         }
 

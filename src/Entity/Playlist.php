@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity;
 
 use App\Repository\PlaylistRepository;
@@ -13,17 +15,23 @@ class Playlist
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $name;
+    private string $name;
 
+    /**
+     * @var Collection<int, Song>&iterable<Song>
+     */
     #[ORM\ManyToMany(targetEntity: Song::class, inversedBy: 'Playlists')]
-    #[ORM\JoinTable(name: "playlist_songs")]
+    #[ORM\JoinTable(name: 'playlist_songs')]
     private Collection $songs;
 
+    /**
+     * @var Collection<int, PlaylistType>&iterable<PlaylistType>
+     */
     #[ORM\ManyToMany(targetEntity: PlaylistType::class, inversedBy: 'Playlists')]
-    #[ORM\JoinTable(name: "playlist_types")]
+    #[ORM\JoinTable(name: 'playlist_types')]
     private Collection $types;
 
     public function __construct()
@@ -50,7 +58,7 @@ class Playlist
     }
 
     /**
-     * @return Collection|Song[]
+     * @return Collection<int, Song>|Song[]
      */
     public function getSongs(): Collection
     {
@@ -58,7 +66,7 @@ class Playlist
     }
 
     /**
-     * @param Collection|Song[] $songs
+     * @param Collection<int, Song>|Song[] $songs
      */
     public function setSongs(Collection $songs): void
     {
@@ -67,7 +75,7 @@ class Playlist
 
     public function addSong(Song $song): self
     {
-        if ($this->songs->contains($song)){
+        if ($this->songs->contains($song)) {
             return $this;
         }
 
@@ -84,7 +92,7 @@ class Playlist
     }
 
     /**
-     * @return Collection|PlaylistType[]
+     * @return Collection<int, PlaylistType>|PlaylistType[]
      */
     public function getTypes(): Collection
     {
@@ -92,16 +100,16 @@ class Playlist
     }
 
     /**
-     * @param Collection|PlaylistType[] $types
+     * @param Collection<int, PlaylistType>|PlaylistType[] $types
      */
     public function setTypes(Collection $types): void
     {
-        $this->songs = $types;
+        $this->types = $types;
     }
 
     public function addType(PlaylistType $type): self
     {
-        if ($this->types->contains($type)){
+        if ($this->types->contains($type)) {
             return $this;
         }
 

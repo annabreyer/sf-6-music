@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types = 1);
 
 namespace App\Manager;
 
@@ -8,7 +10,6 @@ use App\Repository\ArtistRepository;
 
 class AlbumManager
 {
-
     public function __construct(
         private AlbumRepository $albumRepository,
         private ArtistRepository $artistRepository,
@@ -19,12 +20,12 @@ class AlbumManager
     {
         $album = $this->albumRepository->findOneByNameAndArtist($albumName, $artistName);
 
-        if (null !== $album){
+        if (null !== $album) {
             return $album;
         }
 
         $artist = $this->artistRepository->findOneBy(['name' => $artistName]);
-        if (null === $artist){
+        if (null === $artist) {
             $artist = $this->artistManager->createArtist($artistName);
         }
 

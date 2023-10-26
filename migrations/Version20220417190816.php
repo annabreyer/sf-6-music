@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace DoctrineMigrations;
 
@@ -34,7 +34,7 @@ final class Version20220417190816 extends AbstractMigration
         $this->addSql('ALTER TABLE playlist_types ADD CONSTRAINT FK_FA2C90736BBD148 FOREIGN KEY (playlist_id) REFERENCES playlist (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE playlist_types ADD CONSTRAINT FK_FA2C90737A739B89 FOREIGN KEY (playlist_type_id) REFERENCES playlist_type (id) ON DELETE CASCADE');
 
-        $this->addSql('INSERT INTO playlist_type VALUES 
+        $this->addSql('INSERT INTO playlist_type VALUES
                                   (null, "summer"), (null, "spring"), (null, "autumn"), (null, "winter"), (null, "favorites"), (null, "theme")');
     }
 

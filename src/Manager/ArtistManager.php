@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types = 1);
 
 namespace App\Manager;
 
@@ -10,11 +12,11 @@ class ArtistManager
     public function __construct(private ArtistRepository $artistRepository)
     {}
 
-    public function createArtist(string $name)
+    public function createArtist(string $name): Artist
     {
         $artist = $this->artistRepository->findOneBy(['name' => $name]);
 
-        if (null !== $artist){
+        if (null !== $artist) {
             return $artist;
         }
 

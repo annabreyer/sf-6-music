@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity;
 
 use App\Exceptions\InvalidArtistException;
@@ -19,15 +21,18 @@ class Song
     #[ORM\Column(type: 'string', length: 255)]
     private string $title;
 
-    #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'Albums', cascade: ["persist"])]
-    #[ORM\JoinColumn(name: "artist_id", referencedColumnName: "id")]
-    private Artist $artist;
+    #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'Albums', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'artist_id', referencedColumnName: 'id')]
+    private Artist|null $artist;
 
-    #[ORM\ManyToOne(targetEntity: Album::class, inversedBy: 'Albums', cascade: ["persist"])]
-    #[ORM\JoinColumn(name: "album_id", referencedColumnName: "id")]
-    private Album $album;
+    #[ORM\ManyToOne(targetEntity: Album::class, inversedBy: 'Albums', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'album_id', referencedColumnName: 'id')]
+    private Album|null $album;
 
-    #[ORM\ManyToMany(targetEntity: Playlist::class, mappedBy: 'Songs', cascade: ["persist"])]
+    /**
+     * @var Collection<int, Playlist>&iterable<Playlist>
+     */
+    #[ORM\ManyToMany(targetEntity: Playlist::class, mappedBy: 'Songs', cascade: ['persist'])]
     private Collection $playlists;
 
     public function __construct()
@@ -52,7 +57,7 @@ class Song
         return $this;
     }
 
-    public function getArtist(): Artist
+    public function getArtist(): ?Artist
     {
         return $this->artist;
     }
@@ -64,7 +69,7 @@ class Song
         return $this;
     }
 
-    public function getAlbum(): Album
+    public function getAlbum(): ?Album
     {
         return $this->album;
     }
@@ -79,18 +84,24 @@ class Song
             return $this;
         }
 
-        if ($album->getArtist() !== $this->getArtist()){
+        if ($album->getArtist() !== $this->getArtist()) {
             throw new InvalidArtistException('Album artist and song artist do not match.');
         }
 
         return $this;
     }
 
+    /**
+     * @return Collection<int, Playlist>|Playlist[]
+     */
     public function getPlaylists(): Collection
     {
         return $this->playlists;
     }
 
+    /**
+     * @param Collection<int, Playlist>|Playlist[] $playlists
+     */
     public function setPlaylists(Collection $playlists): self
     {
         $this->playlists = $playlists;

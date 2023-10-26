@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace DoctrineMigrations;
 
@@ -21,17 +21,17 @@ final class Version20220417143053 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE song (
-                                id INT AUTO_INCREMENT NOT NULL, 
-                                artist_id INT DEFAULT NULL, 
+                                id INT AUTO_INCREMENT NOT NULL,
+                                artist_id INT DEFAULT NULL,
                                 album_id INT DEFAULT NULL,
-                                title VARCHAR(255) NOT NULL, 
-                                INDEX IDX_33EDEEA1B7970CF8 (artist_id), 
-                                INDEX IDX_33EDEEA11137ABCF (album_id), 
+                                title VARCHAR(255) NOT NULL,
+                                INDEX IDX_33EDEEA1B7970CF8 (artist_id),
+                                INDEX IDX_33EDEEA11137ABCF (album_id),
                                 PRIMARY KEY(id)
                   ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('ALTER TABLE song 
+        $this->addSql('ALTER TABLE song
                             ADD CONSTRAINT FK_33EDEEA1B7970CF8 FOREIGN KEY (artist_id) REFERENCES artist (id)');
-        $this->addSql('ALTER TABLE song 
+        $this->addSql('ALTER TABLE song
                             ADD CONSTRAINT FK_33EDEEA11137ABCF FOREIGN KEY (album_id) REFERENCES album (id)');
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\DataFixtures;
 
 use App\Entity\Album;
@@ -16,23 +18,24 @@ class SongFixtures extends Fixture
         $album  = new Album('Greatest Hits');
         $album->setArtist($artist);
 
-        $song   = new Song();
+        $song = new Song();
         $song->setTitle('Ode to Unit Testing')
             ->setArtist($artist)
-            ->setAlbum($album);
+            ->setAlbum($album)
+        ;
 
         $manager->persist($song);
         $manager->flush();
-
 
         $artist = new Artist('Up and Coming Artist');
         $album  = new Album('Debut');
         $album->setArtist($artist);
 
-        $song   = new Song();
+        $song = new Song();
         $song->setTitle('Love')
-             ->setArtist($artist)
-             ->setAlbum($album);
+            ->setArtist($artist)
+            ->setAlbum($album)
+        ;
 
         $manager->persist($song);
         $manager->flush();

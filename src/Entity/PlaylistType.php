@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity;
 
 use App\Repository\PlaylistTypeRepository;
@@ -10,22 +12,25 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: PlaylistTypeRepository::class)]
 class PlaylistType
 {
-    const TYPE_SUMMER    = 'summer';
-    const TYPE_SPRING    = 'spring';
-    const TYPE_AUTUMN    = 'autumn';
-    const TYPE_WINTER    = 'winter';
-    const TYPE_FAVORITES = 'favorites';
-    const TYPE_THEME     = 'theme';
+    public const TYPE_SUMMER    = 'summer';
+    public const TYPE_SPRING    = 'spring';
+    public const TYPE_AUTUMN    = 'autumn';
+    public const TYPE_WINTER    = 'winter';
+    public const TYPE_FAVORITES = 'favorites';
+    public const TYPE_THEME     = 'theme';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $type;
+    private string $type;
 
-    #[ORM\ManyToMany(targetEntity: Playlist::class, mappedBy: 'types', cascade: ["persist"])]
+    /**
+     * @var Collection<int, Playlist>&iterable<Playlist>
+     */
+    #[ORM\ManyToMany(targetEntity: Playlist::class, mappedBy: 'types', cascade: ['persist'])]
     private Collection $playlists;
 
     public function __construct()
@@ -50,11 +55,17 @@ class PlaylistType
         return $this;
     }
 
+    /**
+     * @return Collection<int, Playlist>|Playlist[]
+     */
     public function getPlaylists(): Collection
     {
         return $this->playlists;
     }
 
+    /**
+     * @param Collection<int, Playlist>|Playlist[] $playlists
+     */
     public function setPlaylists(Collection $playlists): void
     {
         $this->playlists = $playlists;

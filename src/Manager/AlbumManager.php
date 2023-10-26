@@ -14,7 +14,8 @@ class AlbumManager
         private AlbumRepository $albumRepository,
         private ArtistRepository $artistRepository,
         private ArtistManager $artistManager,
-    ) {}
+    ) {
+    }
 
     public function createAlbum(string $albumName, string $artistName): Album
     {

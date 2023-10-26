@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types = 1);
 
 namespace App\Tests\Manager;
 
@@ -6,7 +8,7 @@ use App\DataFixtures\PlaylistFixtures;
 use App\DataFixtures\PlaylistTypeFixtures;
 use App\Entity\Playlist;
 use App\Entity\PlaylistType;
-use App\Exceptions\InvalidArtistException;
+use App\Exceptions\InvalidTypeException;
 use App\Manager\PlaylistManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
@@ -25,8 +27,7 @@ class PlaylistManagerTest extends KernelTestCase
         $this->entityManager      = self::getContainer()->get(EntityManagerInterface::class);
         $this->playlistRepository = $this->entityManager->getRepository(Playlist::class);
         $playlistTypeRepository   = $this->entityManager->getRepository(PlaylistType::class);
-        $managerRegistry  = self::getContainer()->get('doctrine');
-
+        $managerRegistry          = self::getContainer()->get('doctrine');
 
         $this->playlistManager = new PlaylistManager($this->playlistRepository, $playlistTypeRepository, $managerRegistry);
     }
@@ -37,24 +38,23 @@ class PlaylistManagerTest extends KernelTestCase
         $this->entityManager->close();
     }
 
-    public function testCreatePlaylistThrowsErrorByUnknownType()
+    public function testCreatePlaylistThrowsErrorByUnknownType(): void
     {
-        $this->expectException(InvalidArtistException::class);
-        $this->expectErrorMessage('PlaylistType BLABLA does not exist.');
+        $this->expectException(InvalidTypeException::class);
+        $this->expectExceptionMessage('PlaylistType BLABLA does not exist.');
         $this->playlistManager->createPlaylist('Hot Testtracks', 'BLABLA');
     }
 
-    public function testCreatePlaylistReturnsExistingPlaylist()
+    public function testCreatePlaylistReturnsExistingPlaylist(): void
     {
         $this->databaseTool->loadFixtures([PlaylistTypeFixtures::class, PlaylistFixtures::class]);
         $existingPlaylist = $this->playlistRepository->findOneBy(['name' => 'Code away']);
         $playlist         = $this->playlistManager->createPlaylist('Code away', PlaylistType::TYPE_THEME);
 
         $this->assertEquals($existingPlaylist->getId(), $playlist->getId());
-
     }
 
-    public function testCreatePlaylistReturnsNewPlaylist()
+    public function testCreatePlaylistReturnsNewPlaylist(): void
     {
         $this->databaseTool->loadFixtures([PlaylistTypeFixtures::class, PlaylistFixtures::class]);
         $playlist = $this->playlistManager->createPlaylist('Hot Testtracks', PlaylistType::TYPE_THEME);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\DataFixtures;
 
 use App\Entity\Playlist;
@@ -12,7 +14,7 @@ class PlaylistFixtures extends Fixture
     {
         $playlist     = new Playlist();
         $playlist->setName('Code away')
-                 ->addType($this->getReference('typeTheme'))
+            ->addType($this->getReference('typeTheme'))
         ;
         $manager->persist($playlist);
         $manager->flush();

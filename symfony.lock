@@ -344,9 +344,6 @@
     "symfony/polyfill-mbstring": {
         "version": "v1.25.0"
     },
-    "symfony/polyfill-php81": {
-        "version": "v1.25.0"
-    },
     "symfony/proxy-manager-bridge": {
         "version": "v6.0.6"
     },

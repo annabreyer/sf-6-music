@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Uplod Playlist {% endblock %}
+
+{% block body %}
+
+    <h1>Upload Playlist</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.type) }}
+    {{ form_row(form.file) }}
+
+        <button type="submit" class="btn btn-primary">Upload</button>
+    {{ form_end(form) }}
+
+{% endblock %}

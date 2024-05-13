@@ -18,7 +18,6 @@ class PlaylistType
     public const TYPE_WINTER    = 'winter';
     public const TYPE_FAVORITES = 'favorites';
     public const TYPE_THEME     = 'theme';
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -32,6 +31,18 @@ class PlaylistType
      */
     #[ORM\ManyToMany(targetEntity: Playlist::class, mappedBy: 'types', cascade: ['persist'])]
     private Collection $playlists;
+
+    public static function getTypes(): array
+    {
+        return [
+            self::TYPE_SUMMER    => self::TYPE_SUMMER,
+            self::TYPE_SPRING    => self::TYPE_SPRING,
+            self::TYPE_AUTUMN    => self::TYPE_AUTUMN,
+            self::TYPE_WINTER    => self::TYPE_WINTER,
+            self::TYPE_FAVORITES => self::TYPE_FAVORITES,
+            self::TYPE_THEME     => self::TYPE_THEME,
+        ];
+    }
 
     public function __construct(string $type)
     {

@@ -23,13 +23,13 @@ class Artist
     /**
      * @var Collection<int, Album>&iterable<Album>
      */
-    #[ORM\OneToMany(targetEntity: Album::class, mappedBy: 'Artist', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: Album::class, mappedBy: 'artist', cascade: ['persist'])]
     private Collection $albums;
 
     /**
      * @var Collection<int, Song>&iterable<Song>
      */
-    #[ORM\OneToMany(targetEntity: Song::class, mappedBy: 'Artist', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: Song::class, mappedBy: 'artist', cascade: ['persist'])]
     private Collection $songs;
 
     public function __construct(string $name)
@@ -123,5 +123,10 @@ class Artist
         $this->songs->removeElement($song);
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 }

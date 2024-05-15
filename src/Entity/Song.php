@@ -11,7 +11,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SongRepository::class)]
-#[ORM\UniqueConstraint(name: 'UNIQ_TITLE_ARTIST', fields: ['title', 'Artist'])]
 class Song
 {
     #[ORM\Id]
@@ -22,18 +21,18 @@ class Song
     #[ORM\Column(type: 'string', length: 255)]
     private string $title;
 
-    #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'Albums', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'songs', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'artist_id', referencedColumnName: 'id')]
     private Artist|null $artist;
 
-    #[ORM\ManyToOne(targetEntity: Album::class, inversedBy: 'Albums', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Album::class, inversedBy: 'songs', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'album_id', referencedColumnName: 'id')]
     private Album|null $album;
 
     /**
      * @var Collection<int, Playlist>&iterable<Playlist>
      */
-    #[ORM\ManyToMany(targetEntity: Playlist::class, mappedBy: 'Songs', cascade: ['persist'])]
+    #[ORM\ManyToMany(targetEntity: Playlist::class, mappedBy: 'songs', cascade: ['persist'])]
     private Collection $playlists;
 
     public function __construct()

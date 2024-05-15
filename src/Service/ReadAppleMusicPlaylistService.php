@@ -22,16 +22,15 @@ class ReadAppleMusicPlaylistService
 
     public function read(File $playlisteFile, Playlist $playlist): void
     {
-        $content = $playlisteFile->getContent();
-        mb_convert_encoding($content, "UTF-8", "UTF-16LE");
+        $content = mb_convert_encoding($playlisteFile->getContent(), "UTF-8", "UTF-16LE");
 
-        $lines = explode("\n", $content);
+        $lines = explode("\r", $content);
         unset($lines[0]);
 
         foreach ($lines as $line) {
             $lineContents = explode("\t", $line);
 
-            if (count($lineContents) < 4) {
+            if (false === isset($lineContents[self::KEY_ALBUM])) {
                 continue;
             }
 

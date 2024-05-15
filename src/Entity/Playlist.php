@@ -23,14 +23,14 @@ class Playlist
     /**
      * @var Collection<int, Song>&iterable<Song>
      */
-    #[ORM\ManyToMany(targetEntity: Song::class, inversedBy: 'Playlists')]
+    #[ORM\ManyToMany(targetEntity: Song::class, inversedBy: 'playlists')]
     #[ORM\JoinTable(name: 'playlist_songs')]
     private Collection $songs;
 
     /**
      * @var Collection<int, PlaylistType>&iterable<PlaylistType>
      */
-    #[ORM\ManyToMany(targetEntity: PlaylistType::class, inversedBy: 'Playlists')]
+    #[ORM\ManyToMany(targetEntity: PlaylistType::class, inversedBy: 'playlists')]
     #[ORM\JoinTable(name: 'playlist_types')]
     private Collection $types;
 
@@ -123,5 +123,10 @@ class Playlist
         $this->types->removeElement($type);
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 }

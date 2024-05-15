@@ -6,10 +6,12 @@ namespace App\Manager;
 
 use App\Entity\Song;
 use App\Repository\SongRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class SongManager
 {
     public function __construct(
+        private EntityManagerInterface $entityManager,
         private SongRepository $songRepository,
         private AlbumManager $albumManager,
     ) {
@@ -24,13 +26,15 @@ class SongManager
         }
 
         $album = $this->albumManager->createAlbum($albumName, $artist);
+
         $song  = new Song();
         $song->setTitle($title)
             ->setArtist($album->getArtist())
             ->setAlbum($album)
         ;
 
-        $this->songRepository->add($song);
+        $this->entityManager->persist($song);
+        $this->entityManager->flush();
 
         return $song;
     }

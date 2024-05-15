@@ -20,14 +20,14 @@ class Album
     #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
-    #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'Albums', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'albums', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'artist_id', referencedColumnName: 'id')]
     private Artist|null $artist;
 
     /**
      * @var Collection<int, Song>&iterable<Song>
      */
-    #[ORM\OneToMany(targetEntity: Song::class, mappedBy: 'Album', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: Song::class, mappedBy: 'album', cascade: ['persist'])]
     private Collection $songs;
 
     public function __construct(string $name)
@@ -92,5 +92,10 @@ class Album
         $this->songs->removeElement($song);
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 }

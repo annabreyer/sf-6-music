@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{%  block title %} Playlost {{ playlist.name}} {% endblock %}
+
+{%  block body %}
+
+    {%  for song in playlist.songs %}
+
+        <div class="song">
+            <h2>{{ song.title }}</h2>
+            <p>{{ song.artist.name }}</p>
+            <p>{{ song.album.name }}</p>
+        </div>
+
+    {%  endfor %}
+
+{% endblock %}

@@ -9,19 +9,15 @@ use App\Entity\PlaylistType;
 use App\Exceptions\InvalidTypeException;
 use App\Repository\PlaylistRepository;
 use App\Repository\PlaylistTypeRepository;
-use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 
 class PlaylistManager
 {
-    private ObjectManager $entityManager;
-
     public function __construct(
-        private PlaylistRepository $playlistRepository,
-        private PlaylistTypeRepository $playlistTypeRepository,
-        ManagerRegistry $managerRegistry
+        private readonly PlaylistRepository $playlistRepository,
+        private readonly PlaylistTypeRepository $playlistTypeRepository,
+        private readonly EntityManagerInterface $entityManager,
     ) {
-        $this->entityManager = $managerRegistry->getManager();
     }
 
     public function createPlaylist(string $name, string $type): Playlist

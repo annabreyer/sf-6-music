@@ -17,9 +17,11 @@ class AlbumFixtures extends Fixture
         $album  = new Album('Greatest Hits');
         $album->setArtist($artist);
 
+        $manager->persist($artist);
         $manager->persist($album);
         $manager->flush();
 
         $this->addReference('greatestHitsAlbum', $album);
+        $this->addReference('majorArtist', $artist);
     }
 }

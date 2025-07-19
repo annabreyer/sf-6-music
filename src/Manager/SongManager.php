@@ -29,8 +29,8 @@ class SongManager
 
         $song  = new Song();
         $song->setTitle($title)
-            ->setArtist($album->getArtist())
-            ->setAlbum($album)
+             ->setArtist($album->getArtist())
+             ->setAlbum($album)
         ;
 
         $this->entityManager->persist($song);

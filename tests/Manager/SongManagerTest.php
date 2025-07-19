@@ -20,10 +20,10 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class SongManagerTest extends KernelTestCase
 {
-    protected AbstractDatabaseTool $databaseTool;
-    protected EntityManagerInterface $entityManager;
-    protected SongManager $songManager;
-    protected SongRepository $songRepository;
+    private AbstractDatabaseTool $databaseTool;
+    private EntityManagerInterface $entityManager;
+    private SongManager $songManager;
+    private SongRepository $songRepository;
 
     public function setUp(): void
     {
@@ -33,7 +33,6 @@ class SongManagerTest extends KernelTestCase
         $this->entityManager  = self::getContainer()->get(EntityManagerInterface::class);
         $this->songRepository = $this->entityManager->getRepository(Song::class);
 
-        $managerRegistry  = self::getContainer()->get('doctrine');
         $artistRepository = $this->entityManager->getRepository(Artist::class);
 
         $albumManager = new AlbumManager(
@@ -42,7 +41,7 @@ class SongManagerTest extends KernelTestCase
             new ArtistManager($artistRepository)
         );
 
-        $this->songManager = new SongManager($this->songRepository, $albumManager);
+        $this->songManager = new SongManager($this->entityManager, $this->songRepository, $albumManager);
     }
 
     protected function tearDown(): void

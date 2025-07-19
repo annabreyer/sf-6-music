@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types = 1);
 
 namespace App\Controller;
 
@@ -14,16 +16,13 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class UploadController extends AbstractController
 {
-
     #[Route('/upload', name: 'upload')]
     public function upload(
         Request $request,
         PlaylistManager $playlistManager,
         ReadAppleMusicPlaylistService $readAppleMusicPlaylistService,
         AdminUrlGenerator $adminUrlGenerator
-
-    ): Response
-    {
+    ): Response {
         $form = $this->createForm(PlaylistUploadType::class);
         $form->handleRequest($request);
 
@@ -40,7 +39,7 @@ class UploadController extends AbstractController
             return $this->redirect($url);
         }
 
-        return $this->render('upload/index.html.twig',[
+        return $this->render('upload/index.html.twig', [
             'form' => $form->createView(),
         ]);
     }

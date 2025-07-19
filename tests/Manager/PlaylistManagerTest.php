@@ -10,14 +10,18 @@ use App\Entity\Playlist;
 use App\Entity\PlaylistType;
 use App\Exceptions\InvalidTypeException;
 use App\Manager\PlaylistManager;
+use App\Repository\PlaylistRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class PlaylistManagerTest extends KernelTestCase
 {
-    protected EntityManagerInterface $entityManager;
-    protected PlaylistManager $playlistManager;
+    private AbstractDatabaseTool $databaseTool;
+    private EntityManagerInterface $entityManager;
+    private PlaylistManager $playlistManager;
+    private PlaylistRepository $playlistRepository;
 
     public function setUp(): void
     {
@@ -27,9 +31,8 @@ class PlaylistManagerTest extends KernelTestCase
         $this->entityManager      = self::getContainer()->get(EntityManagerInterface::class);
         $this->playlistRepository = $this->entityManager->getRepository(Playlist::class);
         $playlistTypeRepository   = $this->entityManager->getRepository(PlaylistType::class);
-        $managerRegistry          = self::getContainer()->get('doctrine');
 
-        $this->playlistManager = new PlaylistManager($this->playlistRepository, $playlistTypeRepository, $managerRegistry);
+        $this->playlistManager = new PlaylistManager($this->playlistRepository, $playlistTypeRepository, $this->entityManager);
     }
 
     protected function tearDown(): void

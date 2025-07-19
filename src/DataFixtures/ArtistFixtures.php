@@ -16,5 +16,7 @@ class ArtistFixtures extends Fixture
 
         $manager->persist($artist);
         $manager->flush();
+
+        $this->addReference('majorArtist', $artist);
     }
 }

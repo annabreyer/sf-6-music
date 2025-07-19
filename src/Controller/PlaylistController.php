@@ -14,8 +14,8 @@ class PlaylistController extends AbstractController
     #[Route('/playlist/{id}', name: 'playlist_show')]
     public function index(Playlist $playlist): Response
     {
-
         return $this->render('playlist/index.html.twig', [
-            'playlist' => $playlist,]);
+            'playlist' => $playlist,
+        ]);
     }
 }

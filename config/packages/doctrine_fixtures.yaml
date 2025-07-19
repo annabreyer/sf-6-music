@@ -1,3 +1,0 @@
-doctrine_fixtures:
-  # Disable the deprecated container aware loader
-  use_legacy_loaders: false

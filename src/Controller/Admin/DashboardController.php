@@ -27,16 +27,31 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-                        ->setTitle('Earlies Paylist Manager');
+                        ->setTitle('Apple Music Playlist Manager');
     }
 
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+
+        // Analysis Section
+        yield MenuItem::section('📊 Analysis');
+        yield MenuItem::linkToUrl('Analysis Dashboard', 'fas fa-chart-line', '/analysis')
+                      ->setLinkRel('noopener');
+        yield MenuItem::linkToUrl('Interactive Analysis', 'fas fa-search', '/analysis/interactive')
+                      ->setLinkRel('noopener');
+
+        // Data Management Section
+        yield MenuItem::section('📁 Data Management');
         yield MenuItem::linkToCrud('Playlists', 'fas fa-list', Playlist::class);
         yield MenuItem::linkToCrud('Songs','fas fa-music',  Song::class);
         yield MenuItem::linkToCrud('Artists','fas fa-user', Artist::class);
         yield MenuItem::linkToCrud('Albums', 'fas fa-compact-disc', Album::class);
+
+        // Tools Section
+        yield MenuItem::section('🛠️ Tools');
+        yield MenuItem::linkToUrl('Upload Playlist', 'fas fa-upload', '/upload')
+                      ->setLinkRel('noopener');
     }
 
     public function configureCrud(): Crud

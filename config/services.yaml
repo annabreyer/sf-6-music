@@ -11,8 +11,76 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-  # makes classes in src/ available to be used as services
-  # this creates a service per class whose id is the fully-qualified class name
+
+  App\Service\PlaylistAnalysis\Contract\PlaylistDataProviderInterface:
+    class: App\Service\PlaylistAnalysis\DoctrinePlaylistDataProvider
+    arguments:
+      $playlistRepository: '@App\Repository\PlaylistRepository'
+      $playlistTypeRepository: '@App\Repository\PlaylistTypeRepository'
+  App\Service\PlaylistAnalysis\Contract\SongFrequencyCalculatorInterface:
+    class: App\Service\PlaylistAnalysis\SongFrequencyCalculator
+
+  App\Service\PlaylistAnalysis\Contract\PlaylistSimilarityCalculatorInterface:
+    class: App\Service\PlaylistAnalysis\JaccardSimilarityCalculator
+
+  App\Service\PlaylistAnalysis\Contract\ArtistAnalyzerInterface:
+    class: App\Service\PlaylistAnalysis\ArtistFrequencyAnalyzer
+
+  App\Service\PlaylistAnalysis\Contract\PlaylistSongExtractorInterface:
+    class: App\Service\PlaylistAnalysis\PlaylistSongExtractor
+
+  App\Service\PlaylistAnalysis\Contract\CommonSongAnalyzerInterface:
+    class: App\Service\PlaylistAnalysis\CommonSongAnalyzer
+    arguments:
+      $dataProvider: '@App\Service\PlaylistAnalysis\Contract\PlaylistDataProviderInterface'
+      $frequencyCalculator: '@App\Service\PlaylistAnalysis\Contract\SongFrequencyCalculatorInterface'
+
+  App\Service\PlaylistAnalysis\Contract\PlaylistTypeComparatorInterface:
+    class: App\Service\PlaylistAnalysis\PlaylistTypeComparator
+    arguments:
+      $dataProvider: '@App\Service\PlaylistAnalysis\Contract\PlaylistDataProviderInterface'
+      $songExtractor: '@App\Service\PlaylistAnalysis\Contract\PlaylistSongExtractorInterface'
+      $similarityCalculator: '@App\Service\PlaylistAnalysis\Contract\PlaylistSimilarityCalculatorInterface'
+
+  App\Service\PlaylistAnalysis\Contract\UniquePlaylistSongAnalyzerInterface:
+    class: App\Service\PlaylistAnalysis\UniquePlaylistSongAnalyzer
+    arguments:
+      $dataProvider: '@App\Service\PlaylistAnalysis\Contract\PlaylistDataProviderInterface'
+      $songExtractor: '@App\Service\PlaylistAnalysis\Contract\PlaylistSongExtractorInterface'
+
+  App\Service\PlaylistAnalysis\Contract\SeasonalPatternAnalyzerInterface:
+    class: App\Service\PlaylistAnalysis\SeasonalPatternAnalyzer
+    arguments:
+      $dataProvider: '@App\Service\PlaylistAnalysis\Contract\PlaylistDataProviderInterface'
+      $commonSongAnalyzer: '@App\Service\PlaylistAnalysis\Contract\CommonSongAnalyzerInterface'
+      $songExtractor: '@App\Service\PlaylistAnalysis\Contract\PlaylistSongExtractorInterface'
+      $artistAnalyzer: '@App\Service\PlaylistAnalysis\Contract\ArtistAnalyzerInterface'
+
+  App\Service\PlaylistAnalysis\Contract\AnalysisSummaryGeneratorInterface:
+    class: App\Service\PlaylistAnalysis\AnalysisSummaryGenerator
+
+  App\Service\PlaylistAnalysis\PlaylistAnalysisService:
+    arguments:
+      $dataProvider: '@App\Service\PlaylistAnalysis\Contract\PlaylistDataProviderInterface'
+      $commonSongAnalyzer: '@App\Service\PlaylistAnalysis\Contract\CommonSongAnalyzerInterface'
+      $typeComparator: '@App\Service\PlaylistAnalysis\Contract\PlaylistTypeComparatorInterface'
+      $uniqueSongAnalyzer: '@App\Service\PlaylistAnalysis\Contract\UniquePlaylistSongAnalyzerInterface'
+      $patternAnalyzer: '@App\Service\PlaylistAnalysis\Contract\SeasonalPatternAnalyzerInterface'
+      $similarityCalculator: '@App\Service\PlaylistAnalysis\Contract\PlaylistSimilarityCalculatorInterface'
+      $summaryGenerator: '@App\Service\PlaylistAnalysis\Contract\AnalysisSummaryGeneratorInterface'
+
+  # Direct class aliases for when you need to inject specific implementations
+  App\Service\PlaylistAnalysis\DoctrinePlaylistDataProvider: ~
+  App\Service\PlaylistAnalysis\SongFrequencyCalculator: ~
+  App\Service\PlaylistAnalysis\JaccardSimilarityCalculator: ~
+  App\Service\PlaylistAnalysis\ArtistFrequencyAnalyzer: ~
+  App\Service\PlaylistAnalysis\PlaylistSongExtractor: ~
+  App\Service\PlaylistAnalysis\CommonSongAnalyzer: ~
+  App\Service\PlaylistAnalysis\PlaylistTypeComparator: ~
+  App\Service\PlaylistAnalysis\UniquePlaylistSongAnalyzer: ~
+  App\Service\PlaylistAnalysis\SeasonalPatternAnalyzer: ~
+  App\Service\PlaylistAnalysis\AnalysisSummaryGenerator: ~
+
   App\:
     resource: '../src/'
     exclude:
@@ -23,7 +91,7 @@ services:
   # Configure DataFixtures for dependency injection
   App\DataFixtures\:
     resource: '../src/DataFixtures/'
-    tags: ['doctrine.fixture.orm']
+    tags: [ 'doctrine.fixture.orm' ]
 
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones

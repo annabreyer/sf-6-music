@@ -4,7 +4,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/annotations": "^1.14",
@@ -20,7 +20,9 @@
         "symfony/proxy-manager-bridge": "6.4.*",
         "symfony/runtime": "6.4.*",
         "symfony/twig-bundle": "6.4.*",
-        "symfony/yaml": "6.4.*"
+        "symfony/webpack-encore-bundle": "^2.2",
+        "symfony/yaml": "6.4.*",
+        "symfonycasts/tailwind-bundle": "^0.10.1"
     },
     "config": {
         "allow-plugins": {
@@ -55,7 +57,8 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+            "assets:install %PUBLIC_DIR%": "symfony-cmd",
+            "importmap:install": "symfony-cmd"
         },
         "post-install-cmd": [
             "@auto-scripts"

@@ -31,8 +31,32 @@ class AnalysisController extends AbstractController
     {
         $completeAnalysis = $this->analysisService->getCompleteAnalysis();
 
+        // Transform CompleteAnalysis DTO to array format expected by template
+        $analysisData = [
+            'summary' => $completeAnalysis->summary,
+            'by_type' => [],
+            'cross_type_comparisons' => []
+        ];
+
+        // Transform patterns by type
+        foreach ($completeAnalysis->patternsByType as $type => $patterns) {
+            $analysisData['by_type'][$type] = [
+                'total_playlists' => $patterns->totalPlaylists,
+                'total_unique_songs' => $patterns->totalUniqueSongs,
+                'common_songs' => $patterns->commonSongs,
+                'universal_songs' => $patterns->universalSongs,
+                'top_artists' => $patterns->topArtists,
+                'playlist_names' => $patterns->playlistNames
+            ];
+        }
+
+        // Transform type comparisons
+        foreach ($completeAnalysis->typeComparisons as $key => $comparison) {
+            $analysisData['cross_type_comparisons'][$key] = $comparison;
+        }
+
         return $this->render('analysis/dashboard.html.twig', [
-            'analysis' => $completeAnalysis
+            'analysis' => $analysisData
         ]);
     }
 
@@ -104,11 +128,11 @@ class AnalysisController extends AbstractController
             'type' => $type,
             'common_songs' => array_map(function($songData) {
                 return [
-                    'title' => $songData['song']->getTitle(),
-                    'artist' => $songData['song']->getArtist()?->getName(),
-                    'album' => $songData['song']->getAlbum()?->getName(),
-                    'frequency' => $songData['count'],
-                    'playlists' => $songData['playlists']
+                    'title' => $songData->song->getTitle(),
+                    'artist' => $songData->song->getArtist()?->getName(),
+                    'album' => $songData->song->getAlbum()?->getName(),
+                    'frequency' => $songData->count,
+                    'playlists' => $songData->playlistNames
                 ];
             }, $commonSongs)
         ]);
@@ -126,10 +150,10 @@ class AnalysisController extends AbstractController
             'type' => $type,
             'universal_songs' => array_map(function($songData) {
                 return [
-                    'title' => $songData['song']->getTitle(),
-                    'artist' => $songData['song']->getArtist()?->getName(),
-                    'album' => $songData['song']->getAlbum()?->getName(),
-                    'playlists' => $songData['playlists']
+                    'title' => $songData->song->getTitle(),
+                    'artist' => $songData->song->getArtist()?->getName(),
+                    'album' => $songData->song->getAlbum()?->getName(),
+                    'playlists' => $songData->playlistNames
                 ];
             }, $universalSongs)
         ]);
@@ -143,16 +167,15 @@ class AnalysisController extends AbstractController
     {
         $comparison = $this->analysisService->comparePlaylistTypes($typeA, $typeB);
 
-        // Simplify the response for API
         return $this->json([
-            'type_a' => $comparison['type_a'],
-            'type_b' => $comparison['type_b'],
-            'similarity_percentage' => round($comparison['similarity_percentage'], 2),
-            'common_song_count' => $comparison['common_song_count'],
-            'unique_to_a_count' => $comparison['unique_to_a_count'],
-            'unique_to_b_count' => $comparison['unique_to_b_count'],
-            'total_songs_a' => $comparison['total_songs_a'],
-            'total_songs_b' => $comparison['total_songs_b']
+            'type_a' => $comparison->typeA,
+            'type_b' => $comparison->typeB,
+            'similarity_percentage' => round($comparison->similarityPercentage, 2),
+            'common_song_count' => $comparison->getCommonSongCount(),
+            'unique_to_a_count' => $comparison->getUniqueToACount(),
+            'unique_to_b_count' => $comparison->getUniqueToBCount(),
+            'total_songs_a' => $comparison->totalSongsInA,
+            'total_songs_b' => $comparison->totalSongsInB
         ]);
     }
 
@@ -164,19 +187,24 @@ class AnalysisController extends AbstractController
     {
         $analysis = $this->analysisService->getCompleteAnalysis();
 
-        // Simplify for API response
         $simplified = [
-            'summary' => $analysis['summary'],
+            'summary' => [
+                'total_playlist_types' => $analysis->summary->totalPlaylistTypes,
+                'total_playlists' => $analysis->summary->totalPlaylists,
+                'total_unique_songs' => $analysis->summary->totalUniqueSongs,
+                'average_songs_per_type' => $analysis->summary->averageSongsPerType,
+                'average_playlists_per_type' => $analysis->summary->averagePlaylistsPerType
+            ],
             'types' => []
         ];
 
-        foreach ($analysis['by_type'] as $type => $data) {
+        foreach ($analysis->patternsByType as $type => $patterns) {
             $simplified['types'][$type] = [
-                'total_playlists' => $data['total_playlists'],
-                'total_unique_songs' => $data['total_unique_songs'],
-                'common_songs_count' => count($data['common_songs']),
-                'universal_songs_count' => count($data['universal_songs']),
-                'top_artist' => $data['top_artists'][0]['artist']->getName() ?? null
+                'total_playlists' => $patterns->totalPlaylists,
+                'total_unique_songs' => $patterns->totalUniqueSongs,
+                'common_songs_count' => count($patterns->commonSongs),
+                'universal_songs_count' => count($patterns->universalSongs),
+                'top_artist' => $patterns->topArtists[0]->artist->getName() ?? null
             ];
         }
 

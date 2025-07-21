@@ -2,15 +2,13 @@
 
 namespace App\Service\PlaylistAnalysis;
 
-use App\Service\PlaylistAnalysis\Contract\CommonSongAnalyzerInterface;
 use App\Service\PlaylistAnalysis\Contract\PlaylistDataProviderInterface;
-use App\Service\PlaylistAnalysis\Contract\SongFrequencyCalculatorInterface;
 
-class CommonSongAnalyzer implements CommonSongAnalyzerInterface
+class CommonSongAnalyzer
 {
     public function __construct(
         private readonly PlaylistDataProviderInterface $dataProvider,
-        private readonly SongFrequencyCalculatorInterface $frequencyCalculator
+        private readonly SongFrequencyCalculator $frequencyCalculator
     ) {
     }
 

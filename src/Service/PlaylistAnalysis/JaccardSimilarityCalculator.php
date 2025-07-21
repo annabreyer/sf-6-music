@@ -4,9 +4,8 @@ namespace App\Service\PlaylistAnalysis;
 
 use App\Entity\Playlist;
 use App\Entity\Song;
-use App\Service\PlaylistAnalysis\Contract\PlaylistSimilarityCalculatorInterface;
 
-class JaccardSimilarityCalculator implements PlaylistSimilarityCalculatorInterface
+class JaccardSimilarityCalculator
 {
     public function calculateSimilarity(Playlist $playlistA, Playlist $playlistB): float
     {

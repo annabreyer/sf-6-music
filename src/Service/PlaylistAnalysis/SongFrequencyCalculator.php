@@ -4,9 +4,8 @@ namespace App\Service\PlaylistAnalysis;
 
 
 use App\DTO\PlaylistAnalysis\SongFrequencyData;
-use App\Service\PlaylistAnalysis\Contract\SongFrequencyCalculatorInterface;
 
-class SongFrequencyCalculator implements SongFrequencyCalculatorInterface
+class SongFrequencyCalculator
 {
     public function calculateSongFrequencies(array $playlists): array
     {

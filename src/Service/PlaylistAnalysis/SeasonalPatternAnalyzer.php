@@ -4,19 +4,15 @@ namespace App\Service\PlaylistAnalysis;
 
 use App\DTO\PlaylistAnalysis\SeasonalPatterns;
 use App\Entity\Playlist;
-use App\Service\PlaylistAnalysis\Contract\ArtistAnalyzerInterface;
-use App\Service\PlaylistAnalysis\Contract\CommonSongAnalyzerInterface;
 use App\Service\PlaylistAnalysis\Contract\PlaylistDataProviderInterface;
-use App\Service\PlaylistAnalysis\Contract\PlaylistSongExtractorInterface;
-use App\Service\PlaylistAnalysis\Contract\SeasonalPatternAnalyzerInterface;
 
-class SeasonalPatternAnalyzer implements SeasonalPatternAnalyzerInterface
+class SeasonalPatternAnalyzer
 {
     public function __construct(
         private readonly PlaylistDataProviderInterface $dataProvider,
-        private readonly CommonSongAnalyzerInterface $commonSongAnalyzer,
-        private readonly PlaylistSongExtractorInterface $songExtractor,
-        private readonly ArtistAnalyzerInterface $artistAnalyzer
+        private readonly CommonSongAnalyzer $commonSongAnalyzer,
+        private readonly PlaylistSongExtractor $songExtractor,
+        private readonly ArtistFrequencyAnalyzer $artistAnalyzer
     ) {
     }
 

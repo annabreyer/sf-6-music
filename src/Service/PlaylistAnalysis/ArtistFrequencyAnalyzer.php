@@ -3,9 +3,8 @@
 namespace App\Service\PlaylistAnalysis;
 
 use App\DTO\PlaylistAnalysis\ArtistFrequencyData;
-use App\Service\PlaylistAnalysis\Contract\ArtistAnalyzerInterface;
 
-class ArtistFrequencyAnalyzer implements ArtistAnalyzerInterface
+class ArtistFrequencyAnalyzer
 {
     public function getMostFrequentArtists(array $playlists, int $limit = 10): array
     {

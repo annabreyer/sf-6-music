@@ -4,16 +4,13 @@ namespace App\Service\PlaylistAnalysis;
 
 use App\DTO\PlaylistAnalysis\PlaylistTypeComparison;
 use App\Service\PlaylistAnalysis\Contract\PlaylistDataProviderInterface;
-use App\Service\PlaylistAnalysis\Contract\PlaylistSimilarityCalculatorInterface;
-use App\Service\PlaylistAnalysis\Contract\PlaylistSongExtractorInterface;
-use App\Service\PlaylistAnalysis\Contract\PlaylistTypeComparatorInterface;
 
-class PlaylistTypeComparator implements PlaylistTypeComparatorInterface
+class PlaylistTypeComparator
 {
     public function __construct(
         private readonly PlaylistDataProviderInterface $dataProvider,
-        private readonly PlaylistSongExtractorInterface $songExtractor,
-        private readonly PlaylistSimilarityCalculatorInterface $similarityCalculator
+        private readonly PlaylistSongExtractor $songExtractor,
+        private readonly JaccardSimilarityCalculator $similarityCalculator
     ) {
     }
 

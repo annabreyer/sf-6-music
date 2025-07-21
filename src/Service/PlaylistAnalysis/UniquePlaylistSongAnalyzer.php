@@ -5,16 +5,12 @@ namespace App\Service\PlaylistAnalysis;
 use App\DTO\PlaylistAnalysis\PlaylistUniqueSongs;
 use App\Entity\Playlist;
 use App\Service\PlaylistAnalysis\Contract\PlaylistDataProviderInterface;
-use App\Service\PlaylistAnalysis\Contract\PlaylistSongExtractorInterface;
-use App\Service\PlaylistAnalysis\Contract\UniquePlaylistSongAnalyzerInterface;
 
-class UniquePlaylistSongAnalyzer implements UniquePlaylistSongAnalyzerInterface
+class UniquePlaylistSongAnalyzer
 {
     public function __construct(
         private readonly PlaylistDataProviderInterface $dataProvider,
-        private readonly PlaylistSongExtractorInterface $songExtractor
-    ) {
-    }
+    ) {}
 
     public function findUniqueSongs(Playlist $playlist): PlaylistUniqueSongs
     {
@@ -28,8 +24,8 @@ class UniquePlaylistSongAnalyzer implements UniquePlaylistSongAnalyzerInterface
                 continue;
             }
 
-            $otherSongIds = $this->extractSongIdsFromPlaylists($otherPlaylists);
-            $uniqueToType = $this->findSongsNotInCollection($playlist, $otherSongIds);
+            $otherSongIds                  = $this->extractSongIdsFromPlaylists($otherPlaylists);
+            $uniqueToType                  = $this->findSongsNotInCollection($playlist, $otherSongIds);
             $uniqueSongs[$type->getType()] = $uniqueToType;
         }
 
@@ -40,7 +36,7 @@ class UniquePlaylistSongAnalyzer implements UniquePlaylistSongAnalyzerInterface
     {
         $allPlaylists = $this->dataProvider->getPlaylistsByType($type);
 
-        return array_filter($allPlaylists, function(Playlist $p) use ($currentPlaylist) {
+        return array_filter($allPlaylists, function (Playlist $p) use ($currentPlaylist) {
             return $p->getId() !== $currentPlaylist->getId();
         });
     }
@@ -53,6 +49,7 @@ class UniquePlaylistSongAnalyzer implements UniquePlaylistSongAnalyzerInterface
                 $songIds[] = $song->getId();
             }
         }
+
         return array_unique($songIds);
     }
 
@@ -64,6 +61,7 @@ class UniquePlaylistSongAnalyzer implements UniquePlaylistSongAnalyzerInterface
                 $uniqueSongs[] = $song;
             }
         }
+
         return $uniqueSongs;
     }
 }

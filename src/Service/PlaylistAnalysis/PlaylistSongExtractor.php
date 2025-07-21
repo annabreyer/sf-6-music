@@ -2,9 +2,7 @@
 
 namespace App\Service\PlaylistAnalysis;
 
-use App\Service\PlaylistAnalysis\Contract\PlaylistSongExtractorInterface;
-
-class PlaylistSongExtractor implements PlaylistSongExtractorInterface
+class PlaylistSongExtractor
 {
     public function getAllSongsFromPlaylists(array $playlists): array
     {

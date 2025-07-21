@@ -4,9 +4,8 @@ namespace App\Service\PlaylistAnalysis;
 
 use App\DTO\PlaylistAnalysis\AnalysisSummary;
 use App\DTO\PlaylistAnalysis\SeasonalPatterns;
-use App\Service\PlaylistAnalysis\Contract\AnalysisSummaryGeneratorInterface;
 
-class AnalysisSummaryGenerator implements AnalysisSummaryGeneratorInterface
+class AnalysisSummaryGenerator
 {
     public function generateSummary(array $analysisByType): AnalysisSummary
     {

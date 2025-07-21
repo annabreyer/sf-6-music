@@ -10,24 +10,18 @@ use App\DTO\PlaylistAnalysis\PlaylistUniqueSongs;
 use App\DTO\PlaylistAnalysis\SeasonalPatterns;
 use App\DTO\PlaylistAnalysis\SongFrequencyData;
 use App\Entity\Playlist;
-use App\Service\PlaylistAnalysis\Contract\AnalysisSummaryGeneratorInterface;
-use App\Service\PlaylistAnalysis\Contract\CommonSongAnalyzerInterface;
 use App\Service\PlaylistAnalysis\Contract\PlaylistDataProviderInterface;
-use App\Service\PlaylistAnalysis\Contract\PlaylistSimilarityCalculatorInterface;
-use App\Service\PlaylistAnalysis\Contract\PlaylistTypeComparatorInterface;
-use App\Service\PlaylistAnalysis\Contract\SeasonalPatternAnalyzerInterface;
-use App\Service\PlaylistAnalysis\Contract\UniquePlaylistSongAnalyzerInterface;
 
 class PlaylistAnalysisService
 {
     public function __construct(
         private readonly PlaylistDataProviderInterface $dataProvider,
-        private readonly CommonSongAnalyzerInterface $commonSongAnalyzer,
-        private readonly PlaylistTypeComparatorInterface $typeComparator,
-        private readonly UniquePlaylistSongAnalyzerInterface $uniqueSongAnalyzer,
-        private readonly SeasonalPatternAnalyzerInterface $patternAnalyzer,
-        private readonly PlaylistSimilarityCalculatorInterface $similarityCalculator,
-        private readonly AnalysisSummaryGeneratorInterface $summaryGenerator
+        private readonly CommonSongAnalyzer $commonSongAnalyzer,
+        private readonly PlaylistTypeComparator $typeComparator,
+        private readonly UniquePlaylistSongAnalyzer $uniqueSongAnalyzer,
+        private readonly SeasonalPatternAnalyzer $patternAnalyzer,
+        private readonly JaccardSimilarityCalculator $similarityCalculator,
+        private readonly AnalysisSummaryGenerator $summaryGenerator
     ) {}
 
     /** @return SongFrequencyData[] */

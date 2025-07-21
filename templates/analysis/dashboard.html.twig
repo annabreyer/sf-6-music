@@ -43,7 +43,7 @@
                             <div class="flex items-center justify-between">
                                 <div>
                                     <p class="text-sm font-medium text-blue-600 dark:text-blue-400">Playlist Types</p>
-                                    <p class="text-3xl font-bold text-blue-700 dark:text-blue-300">{{ analysis.summary.total_playlist_types }}</p>
+                                    <p class="text-3xl font-bold text-blue-700 dark:text-blue-300">{{ analysis.summary.totalPlaylistTypes }}</p>
                                 </div>
                                 <div class="h-12 w-12 bg-blue-500 rounded-full flex items-center justify-center text-white text-xl group-hover:scale-110 transition-transform duration-200">
                                     🎯
@@ -55,7 +55,7 @@
                             <div class="flex items-center justify-between">
                                 <div>
                                     <p class="text-sm font-medium text-green-600 dark:text-green-400">Total Playlists</p>
-                                    <p class="text-3xl font-bold text-green-700 dark:text-green-300">{{ analysis.summary.total_playlists }}</p>
+                                    <p class="text-3xl font-bold text-green-700 dark:text-green-300">{{ analysis.summary.totalPlaylists }}</p>
                                 </div>
                                 <div class="h-12 w-12 bg-green-500 rounded-full flex items-center justify-center text-white text-xl group-hover:scale-110 transition-transform duration-200">
                                     📚
@@ -67,7 +67,7 @@
                             <div class="flex items-center justify-between">
                                 <div>
                                     <p class="text-sm font-medium text-purple-600 dark:text-purple-400">Unique Songs</p>
-                                    <p class="text-3xl font-bold text-purple-700 dark:text-purple-300">{{ analysis.summary.total_unique_songs }}</p>
+                                    <p class="text-3xl font-bold text-purple-700 dark:text-purple-300">{{ analysis.summary.totalUniqueSongs }}</p>
                                 </div>
                                 <div class="h-12 w-12 bg-purple-500 rounded-full flex items-center justify-center text-white text-xl group-hover:scale-110 transition-transform duration-200">
                                     🎵
@@ -79,7 +79,7 @@
                             <div class="flex items-center justify-between">
                                 <div>
                                     <p class="text-sm font-medium text-yellow-600 dark:text-yellow-400">Avg Songs/Type</p>
-                                    <p class="text-3xl font-bold text-yellow-700 dark:text-yellow-300">{{ analysis.summary.average_songs_per_type }}</p>
+                                    <p class="text-3xl font-bold text-yellow-700 dark:text-yellow-300">{{ analysis.summary.averageSongsPerType }}</p>
                                 </div>
                                 <div class="h-12 w-12 bg-yellow-500 rounded-full flex items-center justify-center text-white text-xl group-hover:scale-110 transition-transform duration-200">
                                     📈
@@ -99,7 +99,7 @@
             </div>
 
             <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                {% for type, data in analysis.by_type %}
+                {% for type, patterns in analysis.patternsByType %}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow duration-300">
                         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
                             <div class="flex items-center justify-between">
@@ -107,7 +107,7 @@
                                     <span class="text-2xl mr-3">🎯</span>
                                     <div>
                                         <h4 class="text-lg font-semibold text-gray-900 dark:text-white capitalize">{{ type }} Analysis</h4>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400">{{ data.total_playlists }} playlists • {{ data.total_unique_songs }} songs</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">{{ patterns.totalPlaylists }} playlists • {{ patterns.totalUniqueSongs }} songs</p>
                                     </div>
                                 </div>
                                 <a href="{{ path('analysis_seasonal', {'type': type}) }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/40 rounded-lg transition-colors duration-200">
@@ -121,18 +121,18 @@
 
                         <div class="p-6 space-y-6">
                             <!-- Top Common Songs -->
-                            {% if data.common_songs|length > 0 %}
+                            {% if patterns.commonSongs|length > 0 %}
                                 <div>
                                     <h6 class="font-semibold text-gray-900 dark:text-white mb-3 flex items-center">
                                         <span class="bg-red-100 dark:bg-red-900/20 p-1.5 rounded-lg mr-2 text-sm">🔥</span>
                                         Most Common Songs
                                     </h6>
                                     <div class="space-y-3">
-                                        {% for songData in data.common_songs|slice(0, 3) %}
+                                        {% for songData in patterns.commonSongs|slice(0, 3) %}
                                             <div class="flex items-center p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-200 dark:border-gray-700">
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400 mr-3">
-                                    {{ songData.count }}x
-                                </span>
+                                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400 mr-3">
+                                                    {{ songData.count }}x
+                                                </span>
                                                 <div class="min-w-0 flex-1">
                                                     <p class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ songData.song.title }}</p>
                                                     <p class="text-xs text-gray-500 dark:text-gray-400 truncate">by {{ songData.song.artist.name }}</p>
@@ -144,18 +144,18 @@
                             {% endif %}
 
                             <!-- Universal Songs -->
-                            {% if data.universal_songs|length > 0 %}
+                            {% if patterns.universalSongs|length > 0 %}
                                 <div>
                                     <h6 class="font-semibold text-gray-900 dark:text-white mb-3 flex items-center">
                                         <span class="bg-yellow-100 dark:bg-yellow-900/20 p-1.5 rounded-lg mr-2 text-sm">⭐</span>
                                         Universal Songs
                                     </h6>
                                     <div class="space-y-3">
-                                        {% for songData in data.universal_songs|slice(0, 3) %}
+                                        {% for songData in patterns.universalSongs|slice(0, 3) %}
                                             <div class="flex items-center p-3 bg-yellow-50 dark:bg-yellow-900/10 rounded-xl border border-yellow-200 dark:border-yellow-800">
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400 mr-3">
-                                    ALL
-                                </span>
+                                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400 mr-3">
+                                                    ALL
+                                                </span>
                                                 <div class="min-w-0 flex-1">
                                                     <p class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ songData.song.title }}</p>
                                                     <p class="text-xs text-gray-500 dark:text-gray-400 truncate">by {{ songData.song.artist.name }}</p>
@@ -167,21 +167,21 @@
                             {% endif %}
 
                             <!-- Top Artists -->
-                            {% if data.top_artists|length > 0 %}
+                            {% if patterns.topArtists|length > 0 %}
                                 <div>
                                     <h6 class="font-semibold text-gray-900 dark:text-white mb-3 flex items-center">
                                         <span class="bg-purple-100 dark:bg-purple-900/20 p-1.5 rounded-lg mr-2 text-sm">🎤</span>
                                         Top Artists
                                     </h6>
                                     <div class="space-y-3">
-                                        {% for artistData in data.top_artists|slice(0, 3) %}
+                                        {% for artistData in patterns.topArtists|slice(0, 3) %}
                                             <div class="flex items-center p-3 bg-purple-50 dark:bg-purple-900/10 rounded-xl border border-purple-200 dark:border-purple-800">
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400 mr-3">
-                                    {{ artistData.song_count }} songs
-                                </span>
+                                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400 mr-3">
+                                                    {{ artistData.songCount }} songs
+                                                </span>
                                                 <div class="min-w-0 flex-1">
                                                     <p class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ artistData.artist.name }}</p>
-                                                    <p class="text-xs text-gray-500 dark:text-gray-400">in {{ artistData.playlist_count }} playlists</p>
+                                                    <p class="text-xs text-gray-500 dark:text-gray-400">in {{ artistData.playlistCount }} playlists</p>
                                                 </div>
                                             </div>
                                         {% endfor %}
@@ -195,7 +195,7 @@
         </div>
 
         <!-- Cross-Type Comparisons -->
-        {% if analysis.cross_type_comparisons|length > 0 %}
+        {% if analysis.typeComparisons|length > 0 %}
             <div class="mb-8">
                 <div class="mb-6">
                     <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Cross-Type Comparisons</h2>
@@ -205,37 +205,37 @@
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                     <div class="p-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {% for comparison_key, comparison in analysis.cross_type_comparisons %}
+                            {% for comparison_key, comparison in analysis.typeComparisons %}
                                 <div class="group relative overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-blue-900/10 dark:via-gray-800 dark:to-purple-900/10">
                                     <div class="flex items-center justify-between mb-4">
                                         <div class="text-2xl">🔄</div>
                                         <div class="text-right">
                                             <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                                                {{ comparison.similarity_percentage|round(1) }}%
+                                                {{ comparison.similarityPercentage|round(1) }}%
                                             </div>
                                             <div class="text-xs text-gray-500 dark:text-gray-400">similarity</div>
                                         </div>
                                     </div>
 
                                     <h6 class="font-semibold text-gray-900 dark:text-white mb-2 capitalize">
-                                        {{ comparison.type_a }} vs {{ comparison.type_b }}
+                                        {{ comparison.typeA }} vs {{ comparison.typeB }}
                                     </h6>
 
                                     <div class="mb-4">
                                         <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                                             <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-1000"
-                                                 style="width: {{ comparison.similarity_percentage }}%"></div>
+                                                 style="width: {{ comparison.similarityPercentage }}%"></div>
                                         </div>
                                     </div>
 
                                     <div class="space-y-2 text-sm">
                                         <div class="flex justify-between text-gray-600 dark:text-gray-400">
                                             <span>Common songs:</span>
-                                            <span class="font-medium text-gray-900 dark:text-white">{{ comparison.common_song_count }}</span>
+                                            <span class="font-medium text-gray-900 dark:text-white">{{ comparison.commonSongCount }}</span>
                                         </div>
                                     </div>
 
-                                    <a href="{{ path('analysis_compare', {'typeA': comparison.type_a, 'typeB': comparison.type_b}) }}"
+                                    <a href="{{ path('analysis_compare', {'typeA': comparison.typeA, 'typeB': comparison.typeB}) }}"
                                        class="absolute inset-0 z-10"></a>
 
                                     <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
@@ -268,7 +268,7 @@
                     <div class="absolute -top-6 -right-6 w-24 h-24 bg-white opacity-10 rounded-full group-hover:scale-110 transition-transform duration-300"></div>
                 </a>
 
-                <a href="{{ path('analysis_api_overview') }}" class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 p-6 text-white hover:from-purple-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+                <a href="{{ path('api_analysis_overview') }}" class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 p-6 text-white hover:from-purple-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl">
                     <div class="relative z-10">
                         <div class="text-3xl mb-3">🔌</div>
                         <h3 class="text-lg font-semibold mb-2">API Overview</h3>

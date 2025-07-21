@@ -9,7 +9,6 @@ use App\Entity\PlaylistType;
 use App\Service\PlaylistAnalysis\PlaylistAnalysisService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -23,46 +22,16 @@ class AnalysisController extends AbstractController
     ) {
     }
 
-    /**
-     * Main analysis dashboard
-     */
     #[Route('/', name: 'dashboard')]
     public function dashboard(): Response
     {
         $completeAnalysis = $this->analysisService->getCompleteAnalysis();
 
-        // Transform CompleteAnalysis DTO to array format expected by template
-        $analysisData = [
-            'summary' => $completeAnalysis->summary,
-            'by_type' => [],
-            'cross_type_comparisons' => []
-        ];
-
-        // Transform patterns by type
-        foreach ($completeAnalysis->patternsByType as $type => $patterns) {
-            $analysisData['by_type'][$type] = [
-                'total_playlists' => $patterns->totalPlaylists,
-                'total_unique_songs' => $patterns->totalUniqueSongs,
-                'common_songs' => $patterns->commonSongs,
-                'universal_songs' => $patterns->universalSongs,
-                'top_artists' => $patterns->topArtists,
-                'playlist_names' => $patterns->playlistNames
-            ];
-        }
-
-        // Transform type comparisons
-        foreach ($completeAnalysis->typeComparisons as $key => $comparison) {
-            $analysisData['cross_type_comparisons'][$key] = $comparison;
-        }
-
         return $this->render('analysis/dashboard.html.twig', [
-            'analysis' => $analysisData
+            'analysis' => $completeAnalysis
         ]);
     }
 
-    /**
-     * Analyze common songs for a specific playlist type
-     */
     #[Route('/seasonal/{type}', name: 'seasonal')]
     public function seasonalAnalysis(string $type): Response
     {
@@ -74,9 +43,6 @@ class AnalysisController extends AbstractController
         ]);
     }
 
-    /**
-     * Compare two playlist types
-     */
     #[Route('/compare/{typeA}/{typeB}', name: 'compare')]
     public function compareTypes(string $typeA, string $typeB): Response
     {
@@ -87,9 +53,6 @@ class AnalysisController extends AbstractController
         ]);
     }
 
-    /**
-     * Analyze similarity between two specific playlists
-     */
     #[Route('/similarity/{playlistA}/{playlistB}', name: 'similarity')]
     public function playlistSimilarity(Playlist $playlistA, Playlist $playlistB): Response
     {
@@ -102,9 +65,6 @@ class AnalysisController extends AbstractController
         ]);
     }
 
-    /**
-     * Find unique songs in a specific playlist
-     */
     #[Route('/unique/{id}', name: 'unique')]
     public function uniqueSongs(Playlist $playlist): Response
     {
@@ -116,104 +76,6 @@ class AnalysisController extends AbstractController
         ]);
     }
 
-    /**
-     * API endpoint for common songs in a playlist type
-     */
-    #[Route('/api/common/{type}', name: 'api_common', methods: ['GET'])]
-    public function apiCommonSongs(string $type): JsonResponse
-    {
-        $commonSongs = $this->analysisService->findCommonSeasonalSongs($type);
-
-        return $this->json([
-            'type' => $type,
-            'common_songs' => array_map(function($songData) {
-                return [
-                    'title' => $songData->song->getTitle(),
-                    'artist' => $songData->song->getArtist()?->getName(),
-                    'album' => $songData->song->getAlbum()?->getName(),
-                    'frequency' => $songData->count,
-                    'playlists' => $songData->playlistNames
-                ];
-            }, $commonSongs)
-        ]);
-    }
-
-    /**
-     * API endpoint for universal songs (appearing in ALL playlists of a type)
-     */
-    #[Route('/api/universal/{type}', name: 'api_universal', methods: ['GET'])]
-    public function apiUniversalSongs(string $type): JsonResponse
-    {
-        $universalSongs = $this->analysisService->findSongsInAllPlaylistsOfType($type);
-
-        return $this->json([
-            'type' => $type,
-            'universal_songs' => array_map(function($songData) {
-                return [
-                    'title' => $songData->song->getTitle(),
-                    'artist' => $songData->song->getArtist()?->getName(),
-                    'album' => $songData->song->getAlbum()?->getName(),
-                    'playlists' => $songData->playlistNames
-                ];
-            }, $universalSongs)
-        ]);
-    }
-
-    /**
-     * API endpoint for playlist type comparison
-     */
-    #[Route('/api/compare/{typeA}/{typeB}', name: 'api_compare', methods: ['GET'])]
-    public function apiCompareTypes(string $typeA, string $typeB): JsonResponse
-    {
-        $comparison = $this->analysisService->comparePlaylistTypes($typeA, $typeB);
-
-        return $this->json([
-            'type_a' => $comparison->typeA,
-            'type_b' => $comparison->typeB,
-            'similarity_percentage' => round($comparison->similarityPercentage, 2),
-            'common_song_count' => $comparison->getCommonSongCount(),
-            'unique_to_a_count' => $comparison->getUniqueToACount(),
-            'unique_to_b_count' => $comparison->getUniqueToBCount(),
-            'total_songs_a' => $comparison->totalSongsInA,
-            'total_songs_b' => $comparison->totalSongsInB
-        ]);
-    }
-
-    /**
-     * API endpoint for complete analysis overview
-     */
-    #[Route('/api/overview', name: 'api_overview', methods: ['GET'])]
-    public function apiOverview(): JsonResponse
-    {
-        $analysis = $this->analysisService->getCompleteAnalysis();
-
-        $simplified = [
-            'summary' => [
-                'total_playlist_types' => $analysis->summary->totalPlaylistTypes,
-                'total_playlists' => $analysis->summary->totalPlaylists,
-                'total_unique_songs' => $analysis->summary->totalUniqueSongs,
-                'average_songs_per_type' => $analysis->summary->averageSongsPerType,
-                'average_playlists_per_type' => $analysis->summary->averagePlaylistsPerType
-            ],
-            'types' => []
-        ];
-
-        foreach ($analysis->patternsByType as $type => $patterns) {
-            $simplified['types'][$type] = [
-                'total_playlists' => $patterns->totalPlaylists,
-                'total_unique_songs' => $patterns->totalUniqueSongs,
-                'common_songs_count' => count($patterns->commonSongs),
-                'universal_songs_count' => count($patterns->universalSongs),
-                'top_artist' => $patterns->topArtists[0]->artist->getName() ?? null
-            ];
-        }
-
-        return $this->json($simplified);
-    }
-
-    /**
-     * Interactive analysis page with forms for custom queries
-     */
     #[Route('/interactive', name: 'interactive')]
     public function interactive(Request $request): Response
     {
@@ -224,10 +86,11 @@ class AnalysisController extends AbstractController
             case 'common_songs':
                 $type = $request->query->get('type');
                 if ($type) {
+                    $commonSongs = $this->analysisService->findCommonSeasonalSongs($type);
                     $results = [
                         'type' => 'common_songs',
                         'playlist_type' => $type,
-                        'data' => $this->analysisService->findCommonSeasonalSongs($type)
+                        'data' => $commonSongs
                     ];
                 }
                 break;
@@ -240,11 +103,12 @@ class AnalysisController extends AbstractController
                     $pB = $this->entityManager->getRepository(Playlist::class)->find($playlistB);
 
                     if ($pA && $pB) {
+                        $similarity = $this->analysisService->calculatePlaylistSimilarity($pA, $pB);
                         $results = [
                             'type' => 'playlist_similarity',
                             'playlist_a' => $pA,
                             'playlist_b' => $pB,
-                            'similarity' => $this->analysisService->calculatePlaylistSimilarity($pA, $pB)
+                            'similarity' => $similarity
                         ];
                     }
                 }
@@ -254,9 +118,10 @@ class AnalysisController extends AbstractController
                 $typeA = $request->query->get('type_a');
                 $typeB = $request->query->get('type_b');
                 if ($typeA && $typeB) {
+                    $comparison = $this->analysisService->comparePlaylistTypes($typeA, $typeB);
                     $results = [
                         'type' => 'type_comparison',
-                        'data' => $this->analysisService->comparePlaylistTypes($typeA, $typeB)
+                        'data' => $comparison
                     ];
                 }
                 break;

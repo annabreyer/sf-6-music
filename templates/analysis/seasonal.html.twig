@@ -1,0 +1,361 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ type|title }} Playlist Analysis{% endblock %}
+
+{% block body %}
+    <div class="p-4 sm:p-6 lg:p-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white flex items-center">
+                        <span class="bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 p-3 rounded-xl mr-4 text-2xl">
+                            {% if type == 'summer' %}☀️
+                            {% elseif type == 'winter' %}❄️
+                            {% elseif type == 'spring' %}🌸
+                            {% elseif type == 'autumn' %}🍂
+                            {% elseif type == 'favorites' %}⭐
+                            {% else %}🎯
+                            {% endif %}
+                        </span>
+                        {{ type|title }} Analysis
+                    </h1>
+                    <p class="mt-2 text-gray-600 dark:text-gray-400">Deep dive into {{ type }} playlist patterns and insights</p>
+                </div>
+                <div class="mt-4 sm:mt-0 flex space-x-3">
+                    <a href="{{ path('analysis_dashboard') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors duration-200">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h2a2 2 0 012 2v0H8v0z"></path>
+                        </svg>
+                        Dashboard
+                    </a>
+                    <a href="{{ path('analysis_interactive') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800 dark:hover:bg-blue-900/40 transition-colors duration-200">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        Interactive
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {% if patterns.hasData %}
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Playlists</p>
+                            <p class="text-3xl font-bold text-blue-600 dark:text-blue-400">{{ patterns.totalPlaylists }}</p>
+                        </div>
+                        <div class="h-12 w-12 bg-blue-100 dark:bg-blue-900/20 rounded-xl flex items-center justify-center">
+                            <span class="text-2xl">📚</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Unique Songs</p>
+                            <p class="text-3xl font-bold text-purple-600 dark:text-purple-400">{{ patterns.totalUniqueSongs }}</p>
+                        </div>
+                        <div class="h-12 w-12 bg-purple-100 dark:bg-purple-900/20 rounded-xl flex items-center justify-center">
+                            <span class="text-2xl">🎵</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Common Songs</p>
+                            <p class="text-3xl font-bold text-red-600 dark:text-red-400">{{ patterns.commonSongs|length }}</p>
+                        </div>
+                        <div class="h-12 w-12 bg-red-100 dark:bg-red-900/20 rounded-xl flex items-center justify-center">
+                            <span class="text-2xl">🔥</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Universal Songs</p>
+                            <p class="text-3xl font-bold text-yellow-600 dark:text-yellow-400">{{ patterns.universalSongs|length }}</p>
+                        </div>
+                        <div class="h-12 w-12 bg-yellow-100 dark:bg-yellow-900/20 rounded-xl flex items-center justify-center">
+                            <span class="text-2xl">⭐</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Playlists in this Type -->
+            <div class="mb-8">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center">
+                            <span class="bg-gray-100 dark:bg-gray-800 p-2 rounded-lg mr-3">📋</span>
+                            {{ type|title }} Playlists
+                        </h3>
+                        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">All playlists in this category</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {% for playlistName in patterns.playlistNames %}
+                                <div class="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+                                    <div class="flex items-center">
+                                        <div class="h-10 w-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mr-3">
+                                            <span class="text-white text-sm">🎵</span>
+                                        </div>
+                                        <div class="min-w-0 flex-1">
+                                            <p class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ playlistName }}</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ type|title }} Playlist</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Common Songs -->
+                {% if patterns.commonSongs|length > 0 %}
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20">
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center">
+                                <span class="bg-red-500 p-2 rounded-lg mr-3 text-white">🔥</span>
+                                Common Songs
+                            </h3>
+                            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Songs appearing in multiple {{ type }} playlists</p>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-4 max-h-96 overflow-y-auto">
+                                {% for songData in patterns.mostCommonSongs(15) %}
+                                    <div class="flex items-center p-4 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow duration-200">
+                                        <div class="flex items-center justify-center w-12 h-12 bg-red-100 dark:bg-red-900/20 rounded-lg mr-4">
+                                            <span class="text-red-600 dark:text-red-400 font-bold text-sm">{{ songData.count }}x</span>
+                                        </div>
+                                        <div class="min-w-0 flex-1">
+                                            <h4 class="text-sm font-semibold text-gray-900 dark:text-white truncate">{{ songData.song.title }}</h4>
+                                            <p class="text-xs text-gray-600 dark:text-gray-400 truncate">by {{ songData.song.artist.name }}</p>
+                                            {% if songData.song.album %}
+                                                <p class="text-xs text-gray-500 dark:text-gray-500 truncate">from {{ songData.song.album.name }}</p>
+                                            {% endif %}
+                                        </div>
+                                        <div class="text-right ml-4">
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ songData.playlistNames|length }} playlists</p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            {% if patterns.commonSongs|length > 15 %}
+                                <div class="mt-6 text-center">
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                                        Showing 15 of {{ patterns.commonSongs|length }} common songs
+                                    </p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Universal Songs -->
+                {% if patterns.universalSongs|length > 0 %}
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20">
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center">
+                                <span class="bg-yellow-500 p-2 rounded-lg mr-3 text-white">⭐</span>
+                                Universal Songs
+                            </h3>
+                            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Songs in ALL {{ type }} playlists</p>
+                        </div>
+                        <div class="p-6">
+                            {% if patterns.universalSongs|length > 0 %}
+                                <div class="space-y-4">
+                                    {% for songData in patterns.universalSongs %}
+                                        <div class="flex items-center p-4 bg-yellow-50 dark:bg-yellow-900/10 rounded-xl border border-yellow-200 dark:border-yellow-800 hover:shadow-md transition-shadow duration-200">
+                                            <div class="flex items-center justify-center w-12 h-12 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg mr-4">
+                                                <span class="text-yellow-600 dark:text-yellow-400 font-bold text-xs">ALL</span>
+                                            </div>
+                                            <div class="min-w-0 flex-1">
+                                                <h4 class="text-sm font-semibold text-gray-900 dark:text-white truncate">{{ songData.song.title }}</h4>
+                                                <p class="text-xs text-gray-600 dark:text-gray-400 truncate">by {{ songData.song.artist.name }}</p>
+                                                {% if songData.song.album %}
+                                                    <p class="text-xs text-gray-500 dark:text-gray-500 truncate">from {{ songData.song.album.name }}</p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="text-right ml-4">
+                                                <p class="text-xs text-yellow-600 dark:text-yellow-400 font-medium">Universal</p>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="text-center py-8">
+                                    <div class="w-16 h-16 mx-auto bg-yellow-100 dark:bg-yellow-900/20 rounded-full flex items-center justify-center mb-4">
+                                        <span class="text-2xl">🤷</span>
+                                    </div>
+                                    <h4 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No Universal Songs</h4>
+                                    <p class="text-gray-500 dark:text-gray-400 max-w-sm mx-auto">
+                                        There are no songs that appear in every {{ type }} playlist. This suggests diverse musical tastes within this category.
+                                    </p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Top Artists -->
+            {% if patterns.topArtists|length > 0 %}
+                <div class="mb-8">
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center">
+                                <span class="bg-purple-500 p-2 rounded-lg mr-3 text-white">🎤</span>
+                                Top Artists in {{ type|title }}
+                            </h3>
+                            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Most frequently appearing artists</p>
+                        </div>
+                        <div class="p-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {% for artistData in patterns.topArtists %}
+                                    <div class="bg-purple-50 dark:bg-purple-900/10 rounded-xl p-6 border border-purple-200 dark:border-purple-800 hover:shadow-lg transition-all duration-200">
+                                        <div class="flex items-center mb-4">
+                                            <div class="h-12 w-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mr-4">
+                                                <span class="text-white text-lg">🎤</span>
+                                            </div>
+                                            <div class="min-w-0 flex-1">
+                                                <h4 class="text-lg font-semibold text-gray-900 dark:text-white truncate">{{ artistData.artist.name }}</h4>
+                                                <p class="text-sm text-purple-600 dark:text-purple-400">{{ artistData.songCount }} songs</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="space-y-2">
+                                            <div class="flex justify-between text-sm">
+                                                <span class="text-gray-600 dark:text-gray-400">Playlists:</span>
+                                                <span class="font-medium text-gray-900 dark:text-white">{{ artistData.playlistCount }}</span>
+                                            </div>
+                                            <div class="w-full bg-purple-200 dark:bg-purple-800 rounded-full h-2">
+                                                <div class="bg-purple-500 h-2 rounded-full transition-all duration-1000"
+                                                     style="width: {{ (artistData.playlistCount / patterns.totalPlaylists * 100)|round }}%"></div>
+                                            </div>
+                                        </div>
+
+                                        {% if artistData.playlistNames|length > 0 %}
+                                            <div class="mt-4">
+                                                <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Found in:</p>
+                                                <div class="text-xs text-gray-600 dark:text-gray-400">
+                                                    {% for playlistName in artistData.playlistNames|slice(0, 3) %}
+                                                        <span class="inline-block bg-purple-100 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-md mr-1 mb-1">{{ playlistName }}</span>
+                                                    {% endfor %}
+                                                    {% if artistData.playlistNames|length > 3 %}
+                                                        <span class="text-purple-600 dark:text-purple-400">+{{ artistData.playlistNames|length - 3 }} more</span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Quick Actions -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">🔗 Related Analysis</h3>
+                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Explore related insights and comparisons</p>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <a href="{{ path('analysis_api_common', {'type': type}) }}"
+                           class="group bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/10 dark:to-blue-800/10 border border-blue-200 dark:border-blue-800 rounded-xl p-4 hover:shadow-lg transition-all duration-200"
+                           target="_blank">
+                            <div class="flex items-center">
+                                <div class="h-10 w-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-200">
+                                    <span class="text-white text-sm">🔌</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white">API: Common Songs</h4>
+                                    <p class="text-xs text-blue-600 dark:text-blue-400">JSON data export</p>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="{{ path('analysis_api_universal', {'type': type}) }}"
+                           class="group bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/10 dark:to-yellow-800/10 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4 hover:shadow-lg transition-all duration-200"
+                           target="_blank">
+                            <div class="flex items-center">
+                                <div class="h-10 w-10 bg-yellow-500 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-200">
+                                    <span class="text-white text-sm">⭐</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white">API: Universal Songs</h4>
+                                    <p class="text-xs text-yellow-600 dark:text-yellow-400">JSON data export</p>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="{{ path('analysis_interactive') }}?query_type=common_songs&type={{ type }}"
+                           class="group bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/10 dark:to-purple-800/10 border border-purple-200 dark:border-purple-800 rounded-xl p-4 hover:shadow-lg transition-all duration-200">
+                            <div class="flex items-center">
+                                <div class="h-10 w-10 bg-purple-500 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-200">
+                                    <span class="text-white text-sm">🔍</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white">Interactive Query</h4>
+                                    <p class="text-xs text-purple-600 dark:text-purple-400">Advanced analysis</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        {% else %}
+            <!-- No Data State -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="p-12 text-center">
+                    <div class="w-24 h-24 mx-auto bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-6">
+                        <span class="text-4xl">📭</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">No {{ type|title }} Data Found</h3>
+                    <div class="max-w-md mx-auto">
+                        {% if patterns.message %}
+                            <p class="text-gray-600 dark:text-gray-400 mb-6">{{ patterns.message }}</p>
+                        {% else %}
+                            <p class="text-gray-600 dark:text-gray-400 mb-6">
+                                We couldn't find any playlists of type "{{ type }}". This might mean:
+                            </p>
+                            <ul class="text-left text-sm text-gray-500 dark:text-gray-400 space-y-2 mb-6">
+                                <li>• No playlists have been uploaded for this type</li>
+                                <li>• The playlist type doesn't exist in the system</li>
+                                <li>• There might be a spelling issue with the type name</li>
+                            </ul>
+                        {% endif %}
+
+                        <div class="space-x-4">
+                            <a href="{{ path('upload') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200">
+                                <span class="mr-2">📁</span>
+                                Upload Playlists
+                            </a>
+                            <a href="{{ path('analysis_dashboard') }}" class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-lg transition-colors duration-200">
+                                <span class="mr-2">📊</span>
+                                View Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

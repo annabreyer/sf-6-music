@@ -152,7 +152,7 @@
                                         <option value="">Select first type...</option>
                                         {% for type in available_types %}
                                             <option value="{{ type }}"
-                                                    {% if results and results.type == 'type_comparison' and results.data.type_a == type %}selected{% endif %}>
+                                                    {% if results and results.type == 'type_comparison' and results.data.typeA == type %}selected{% endif %}>
                                                 {{ type|title }}
                                             </option>
                                         {% endfor %}
@@ -167,7 +167,7 @@
                                         <option value="">Select second type...</option>
                                         {% for type in available_types %}
                                             <option value="{{ type }}"
-                                                    {% if results and results.type == 'type_comparison' and results.data.type_b == type %}selected{% endif %}>
+                                                    {% if results and results.type == 'type_comparison' and results.data.typeB == type %}selected{% endif %}>
                                                 {{ type|title }}
                                             </option>
                                         {% endfor %}
@@ -234,7 +234,7 @@
                                                     </td>
                                                     <td class="px-6 py-4">
                                                         <div class="text-sm text-gray-500 dark:text-gray-400 max-w-xs truncate">
-                                                            {{ songData.playlists|join(', ') }}
+                                                            {{ songData.playlistNames|join(', ') }}
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -336,7 +336,7 @@
                             <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-t-2xl">
                                 <h4 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center">
                                     <span class="bg-purple-500 p-2 rounded-lg mr-3 text-white">🔄</span>
-                                    {{ results.data.type_a|title }} vs {{ results.data.type_b|title }} Comparison
+                                    {{ results.data.typeA|title }} vs {{ results.data.typeB|title }} Comparison
                                 </h4>
                                 <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Analyzing musical differences between playlist types</p>
                             </div>
@@ -344,60 +344,60 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                                     <div class="text-center">
                                         <div class="bg-blue-100 dark:bg-blue-900/20 rounded-2xl p-6 mb-4">
-                                            <h3 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-2">{{ results.data.type_a|title }}</h3>
+                                            <h3 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-2">{{ results.data.typeA|title }}</h3>
                                             <div class="space-y-2">
-                                                <p class="text-blue-600 dark:text-blue-400"><span class="font-semibold">{{ results.data.playlists_a }}</span> playlists</p>
-                                                <p class="text-blue-600 dark:text-blue-400"><span class="font-semibold">{{ results.data.total_songs_a }}</span> unique songs</p>
+                                                <p class="text-blue-600 dark:text-blue-400"><span class="font-semibold">{{ results.data.playlistsInA }}</span> playlists</p>
+                                                <p class="text-blue-600 dark:text-blue-400"><span class="font-semibold">{{ results.data.totalSongsInA }}</span> unique songs</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="text-center">
                                         <div class="bg-purple-100 dark:bg-purple-900/20 rounded-2xl p-6 mb-4">
-                                            <h3 class="text-2xl font-bold text-purple-700 dark:text-purple-300 mb-2">{{ results.data.type_b|title }}</h3>
+                                            <h3 class="text-2xl font-bold text-purple-700 dark:text-purple-300 mb-2">{{ results.data.typeB|title }}</h3>
                                             <div class="space-y-2">
-                                                <p class="text-purple-600 dark:text-purple-400"><span class="font-semibold">{{ results.data.playlists_b }}</span> playlists</p>
-                                                <p class="text-purple-600 dark:text-purple-400"><span class="font-semibold">{{ results.data.total_songs_b }}</span> unique songs</p>
+                                                <p class="text-purple-600 dark:text-purple-400"><span class="font-semibold">{{ results.data.playlistsInB }}</span> playlists</p>
+                                                <p class="text-purple-600 dark:text-purple-400"><span class="font-semibold">{{ results.data.totalSongsInB }}</span> unique songs</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="text-center mb-8">
-                                    <h4 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ results.data.similarity_percentage|round(1) }}% Similar</h4>
+                                    <h4 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ results.data.similarityPercentage|round(1) }}% Similar</h4>
                                     <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 mb-4">
                                         <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-4 rounded-full transition-all duration-1000"
-                                             style="width: {{ results.data.similarity_percentage }}%"></div>
+                                             style="width: {{ results.data.similarityPercentage }}%"></div>
                                     </div>
                                     <p class="text-gray-600 dark:text-gray-400">Overall musical similarity between these playlist types</p>
                                 </div>
 
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                                     <div class="text-center p-6 bg-green-50 dark:bg-green-900/10 rounded-xl border border-green-200 dark:border-green-800">
-                                        <div class="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">{{ results.data.common_song_count }}</div>
+                                        <div class="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">{{ results.data.commonSongCount }}</div>
                                         <p class="text-green-700 dark:text-green-300 font-medium">Common Songs</p>
                                         <p class="text-sm text-green-600 dark:text-green-400 mt-1">Shared between both types</p>
                                     </div>
                                     <div class="text-center p-6 bg-blue-50 dark:bg-blue-900/10 rounded-xl border border-blue-200 dark:border-blue-800">
-                                        <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">{{ results.data.unique_to_a_count }}</div>
-                                        <p class="text-blue-700 dark:text-blue-300 font-medium">Only in {{ results.data.type_a|title }}</p>
+                                        <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">{{ results.data.uniqueToACount }}</div>
+                                        <p class="text-blue-700 dark:text-blue-300 font-medium">Only in {{ results.data.typeA|title }}</p>
                                         <p class="text-sm text-blue-600 dark:text-blue-400 mt-1">Unique to this type</p>
                                     </div>
                                     <div class="text-center p-6 bg-purple-50 dark:bg-purple-900/10 rounded-xl border border-purple-200 dark:border-purple-800">
-                                        <div class="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">{{ results.data.unique_to_b_count }}</div>
-                                        <p class="text-purple-700 dark:text-purple-300 font-medium">Only in {{ results.data.type_b|title }}</p>
+                                        <div class="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">{{ results.data.uniqueToACount }}</div>
+                                        <p class="text-purple-700 dark:text-purple-300 font-medium">Only in {{ results.data.typeB|title }}</p>
                                         <p class="text-sm text-purple-600 dark:text-purple-400 mt-1">Unique to this type</p>
                                     </div>
                                 </div>
 
                                 <!-- Show some sample common songs if available -->
-                                {% if results.data.common_songs|length > 0 %}
+                                {% if results.data.commonSongs|length > 0 %}
                                     <div class="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-6">
                                         <h6 class="font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                                             <span class="bg-green-100 dark:bg-green-900/20 p-1.5 rounded-lg mr-2">🎵</span>
                                             Sample Common Songs
                                         </h6>
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                            {% for song in results.data.common_songs|slice(0, 6) %}
+                                            {% for song in results.data.commonSongs|slice(0, 6) %}
                                                 <div class="flex items-center p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
                                                     <div class="min-w-0 flex-1">
                                                         <p class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ song.title }}</p>
@@ -406,9 +406,9 @@
                                                 </div>
                                             {% endfor %}
                                         </div>
-                                        {% if results.data.common_songs|length > 6 %}
+                                        {% if results.data.commonSongs|length > 6 %}
                                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-3 text-center">
-                                                ... and {{ results.data.common_songs|length - 6 }} more common songs
+                                                ... and {{ results.data.commonSongs|length - 6 }} more common songs
                                             </p>
                                         {% endif %}
                                     </div>
